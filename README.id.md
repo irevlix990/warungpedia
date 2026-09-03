@@ -27,6 +27,19 @@ Nama **Warungpedia** menggabungkan kata *"Warung"* (toko kecil khas Indonesia) d
 
 ---
 
+> ### ⚖️ Pemberitahuan Hak Kekayaan Intelektual
+>
+> | | |
+> |---|---|
+> | **Hak Cipta** | © 2026 **Warungpedia**. Seluruh hak cipta dilindungi. |
+> | **Merek (Brand)** | **Warungpedia™** adalah identitas merek orisinal. Nama, logo, sistem desain, dan palet warna (`crisp`, `blossom`, `lilac`, `royal`) merupakan kekayaan intelektual milik penulis. |
+> | **Lisensi** | Kode sumber proyek ini dilisensikan di bawah [MIT License](./LICENSE). Anda diperbolehkan mempelajari, menggunakan, dan mengembangkan kode ini untuk keperluan pribadi/edukasi **dengan atribusi yang benar**. |
+> | **Larangan** | **Mengemas ulang, menjual kembali, atau mendistribusikan ulang proyek ini — baik sebagian maupun seluruhnya — sebagai produk kompetitor, layanan SaaS, atau template marketplace tanpa izin tertulis adalah dilarang keras dan dapat dianggap sebagai pelanggaran hak kekayaan intelektual.** |
+>
+> *Jika Anda berniat menggunakan proyek ini secara komersial atau sebagai basis produk, silakan hubungi penulis untuk pengaturan lisensi.*
+
+---
+
 ## 🎯 Latar Belakang & Tujuan
 
 Proyek ini dibangun sebagai **proyek portofolio tingkat produksi** untuk mendemonstrasikan keahlian rekayasa perangkat lunak full-stack secara komprehensif:
@@ -278,13 +291,33 @@ Dokumentasi arsitektur lebih mendalam dapat dibaca pada berkas berikut:
 
 ## 👨‍💻 Pengembang
 
+## 👨‍💻 Penulis (Author)
+
 Dibuat dengan ❤️ sebagai proyek portofolio full-stack engineering tingkat lanjut yang siap digunakan di dunia nyata.
+
+**Penulis:** [irevlix990](https://github.com/irevlix990)  
+**Merek:** Warungpedia™
 
 ---
 
-## 📝 Lisensi
+## 📝 Lisensi & Ketentuan Penggunaan
 
-Proyek ini bersifat open-source dan berada di bawah naungan lisensi [MIT License](./LICENSE).
+Proyek ini dilisensikan di bawah **MIT License** — lihat file [LICENSE](./LICENSE) untuk detail lengkap.
+
+```
+MIT License — Copyright (c) 2026 Warungpedia
+```
+
+### Ketentuan Penggunaan
+
+| ✅ Diperbolehkan | ❌ Dilarang |
+|---|---|
+| Mempelajari kode sumber untuk keperluan edukasi | Menghapus pemberitahuan hak cipta / lisensi |
+| Melakukan *fork* untuk eksplorasi non-komersial | Menjual kode ini sebagai template / produk digital |
+| Menggunakan dengan **atribusi yang jelas** (nama author + tautan repo) | Mengganti nama (*rebrand*) seolah menjadi produk buatan sendiri |
+| Berkontribusi melalui *Pull Request* | Menjadikan layanan SaaS komersial tanpa lisensi resmi |
+
+> **Perhatian Penting:** Lisensi MIT berlaku untuk kode sumber, namun **merek dagang, nama, logo, dan identitas visual Warungpedia™** **TIDAK** termasuk dalam lisensi MIT dan **TIDAK** boleh digunakan untuk tujuan komersial tanpa izin tertulis dari pemilik hak cipta.
 
 ---
 

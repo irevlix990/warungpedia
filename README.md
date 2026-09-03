@@ -29,6 +29,19 @@ The name **Warungpedia** combines *"Warung"* (Indonesian for small shop/stall) w
 
 ---
 
+> ### ⚖️ Intellectual Property Notice
+>
+> | | |
+> |---|---|
+> | **Copyright** | © 2026 **Warungpedia**. All rights reserved. |
+> | **Brand** | **Warungpedia™** is an original brand identity. The name, logo, design system, and brand palette (`crisp`, `blossom`, `lilac`, `royal`) are the intellectual property of the author. |
+> | **License** | This source code is licensed under the [MIT License](./LICENSE). You may study, learn from, and use this code for personal/educational purposes **with proper attribution**. |
+> | **Restriction** | **Repackaging, reselling, or commercial redistribution of this project — in whole or in part — as a competing product, SaaS offering, or marketplace template without explicit written permission is strictly prohibited and may constitute intellectual property infringement.** |
+>
+> *If you intend to use this project commercially or as a base for a product, please contact the author for licensing arrangements.*
+
+---
+
 ## 🎯 Purpose
 
 Warungpedia was built as a **portfolio-grade, production-ready project** to demonstrate end-to-end full-stack engineering capabilities:
@@ -344,11 +357,29 @@ npm run dev    # → http://localhost:3000
 
 Built with ❤️ as a full-stack portfolio project demonstrating production-ready engineering.
 
+**Author:** [irevlix990](https://github.com/irevlix990)
+**Brand:** Warungpedia™
+
 ---
 
 ## 📝 License
 
-This project is open source under the [MIT License](./LICENSE).
+This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+
+```
+MIT License — Copyright (c) 2026 Warungpedia
+```
+
+### Usage Terms
+
+| ✅ Permitted | ❌ Prohibited |
+|---|---|
+| Study and learn from the source code | Removing copyright / license notices |
+| Fork for personal learning & non-commercial use | Selling this code as a product or template |
+| Use with **proper attribution** (author + repo link) | Rebranding as your own marketplace product |
+| Contribute back via Pull Requests | Commercial SaaS redistribution without a license |
+
+> **Important:** While MIT permits code reuse, the **Warungpedia™ brand, name, logo, and visual identity** are **NOT** covered by the MIT License and may **NOT** be used without written permission. For commercial licensing inquiries, please open an issue or contact the author directly.
 
 ---
 
