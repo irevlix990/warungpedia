@@ -1,0 +1,91 @@
+/**
+ * Role & permission model for Warungpedia.
+ *
+ * Roles are stored per-user; admin permissions are granular. Authorization
+ * is enforced both in the database (RLS) and server-side services — never
+ * trusted from the client.
+ */
+
+export const ROLES = {
+  BUYER: 'BUYER',
+  SELLER: 'SELLER',
+  ADMIN: 'ADMIN',
+  SUPER_ADMIN: 'SUPER_ADMIN',
+} as const
+
+export type Role = (typeof ROLES)[keyof typeof ROLES]
+
+export const PERMISSIONS = {
+  MANAGE_USERS: 'MANAGE_USERS',
+  MANAGE_SELLERS: 'MANAGE_SELLERS',
+  VERIFY_SELLERS: 'VERIFY_SELLERS',
+  MODERATE_PRODUCTS: 'MODERATE_PRODUCTS',
+  MANAGE_ORDERS: 'MANAGE_ORDERS',
+  MANAGE_PAYMENTS: 'MANAGE_PAYMENTS',
+  MANAGE_WITHDRAWALS: 'MANAGE_WITHDRAWALS',
+  MANAGE_REFUNDS: 'MANAGE_REFUNDS',
+  MANAGE_DISPUTES: 'MANAGE_DISPUTES',
+  MANAGE_VOUCHERS: 'MANAGE_VOUCHERS',
+  MANAGE_FLASH_SALES: 'MANAGE_FLASH_SALES',
+  MANAGE_CMS: 'MANAGE_CMS',
+  VIEW_ANALYTICS: 'VIEW_ANALYTICS',
+  MANAGE_SETTINGS: 'MANAGE_SETTINGS',
+  MANAGE_STORE: 'MANAGE_STORE',
+} as const
+
+export type Permission =
+  (typeof PERMISSIONS)[keyof typeof PERMISSIONS]
+
+/**
+ * All permissions a role holds implicitly (in addition to any explicitly
+ * granted per-user permissions stored in the database).
+ */
+export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
+  BUYER: [],
+  SELLER: [PERMISSIONS.MANAGE_STORE],
+  ADMIN: [
+    PERMISSIONS.MANAGE_USERS,
+    PERMISSIONS.MANAGE_SELLERS,
+    PERMISSIONS.VERIFY_SELLERS,
+    PERMISSIONS.MODERATE_PRODUCTS,
+    PERMISSIONS.MANAGE_ORDERS,
+    PERMISSIONS.MANAGE_PAYMENTS,
+    PERMISSIONS.MANAGE_WITHDRAWALS,
+    PERMISSIONS.MANAGE_REFUNDS,
+    PERMISSIONS.MANAGE_DISPUTES,
+    PERMISSIONS.MANAGE_VOUCHERS,
+    PERMISSIONS.MANAGE_FLASH_SALES,
+    PERMISSIONS.MANAGE_CMS,
+    PERMISSIONS.VIEW_ANALYTICS,
+    PERMISSIONS.MANAGE_SETTINGS,
+    PERMISSIONS.MANAGE_STORE,
+  ],
+  SUPER_ADMIN: [
+    PERMISSIONS.MANAGE_USERS,
+    PERMISSIONS.MANAGE_SELLERS,
+    PERMISSIONS.VERIFY_SELLERS,
+    PERMISSIONS.MODERATE_PRODUCTS,
+    PERMISSIONS.MANAGE_ORDERS,
+    PERMISSIONS.MANAGE_PAYMENTS,
+    PERMISSIONS.MANAGE_WITHDRAWALS,
+    PERMISSIONS.MANAGE_REFUNDS,
+    PERMISSIONS.MANAGE_DISPUTES,
+    PERMISSIONS.MANAGE_VOUCHERS,
+    PERMISSIONS.MANAGE_FLASH_SALES,
+    PERMISSIONS.MANAGE_CMS,
+    PERMISSIONS.VIEW_ANALYTICS,
+    PERMISSIONS.MANAGE_SETTINGS,
+    PERMISSIONS.MANAGE_STORE,
+  ],
+}
+
+/**
+ * Pure RBAC decision: returns whether a role implicitly holds a permission.
+ * Centralized so server services and the DAL share one source of truth.
+ */
+export function hasPermission(
+  role: Role,
+  permission: Permission
+): boolean {
+  return (ROLE_PERMISSIONS[role] ?? []).includes(permission)
+}
