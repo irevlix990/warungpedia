@@ -195,46 +195,6 @@
   }
 }
 
-/* ── Scroll Reveal (pure CSS, GPU-composited) ─────────────────── */
-
-/* Hidden state — applied initially */
-.wp-reveal {
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-/* Revealed state — toggled by JS when element enters viewport */
-.wp-reveal.is-revealed {
-  opacity: 1;
-  animation-fill-mode: forwards;
-}
-
-/* Direction-specific animation triggers */
-.wp-reveal.is-revealed.wp-reveal-up {
-  animation: reveal-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.wp-reveal.is-revealed.wp-reveal-down {
-  animation: reveal-down 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.wp-reveal.is-revealed.wp-reveal-left {
-  animation: reveal-left 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.wp-reveal.is-revealed.wp-reveal-right {
-  animation: reveal-right 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.wp-reveal.is-revealed.wp-reveal-none {
-  animation: reveal-fade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Respect reduced-motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .wp-reveal {
-    opacity: 1 !important;
-    animation: none !important;
-    transform: none !important;
-  }
-}
-
 @layer base {
   * {
     border-color: var(--color-neutral-200);

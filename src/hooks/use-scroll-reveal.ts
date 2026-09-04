@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, type RefObject } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 
 interface UseScrollRevealOptions {
   threshold?: number
@@ -10,15 +10,13 @@ interface UseScrollRevealOptions {
 
 interface ScrollRevealReturn {
   ref: RefObject<HTMLDivElement | null>
+  style: CSSProperties
 }
 
 /**
- * Registers an IntersectionObserver on the ref'd element and toggles
- * a CSS class (`is-revealed`) so the browser's compositor handles
- * the actual animation via @keyframes — zero React re-renders per frame.
- *
- * The element must have `wp-reveal wp-reveal-{direction}` classes
- * pre-applied for the initial hidden state to take effect.
+ * Pure inline-style scroll reveal. No CSS classes, no layers, no specificity issues.
+ * Sets initial hidden state via React state, then applies a CSS transition
+ * + transforms via inline styles when element enters viewport.
  */
 export function useScrollReveal({
   threshold = 0.1,
@@ -26,6 +24,8 @@ export function useScrollReveal({
   once = true,
 }: UseScrollRevealOptions = {}): ScrollRevealReturn {
   const ref = useRef<HTMLDivElement | null>(null)
+  const [revealed, setRevealed] = useState(false)
+  const revealedRef = useRef(false)
 
   useEffect(() => {
     const el = ref.current
@@ -33,15 +33,19 @@ export function useScrollReveal({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          if (delay > 0) {
-            setTimeout(() => el.classList.add('is-revealed'), delay)
-          } else {
-            el.classList.add('is-revealed')
-          }
+        if (entry.isIntersecting && !revealedRef.current) {
+          revealedRef.current = true
+          requestAnimationFrame(() => {
+            if (delay > 0) {
+              setTimeout(() => setRevealed(true), delay)
+            } else {
+              setRevealed(true)
+            }
+          })
           if (once) observer.unobserve(el)
-        } else if (!once) {
-          el.classList.remove('is-revealed')
+        } else if (!entry.isIntersecting && !once) {
+          revealedRef.current = false
+          setRevealed(false)
         }
       },
       { threshold, rootMargin: '0px 0px -30px 0px' }
@@ -51,5 +55,12 @@ export function useScrollReveal({
     return () => observer.disconnect()
   }, [threshold, delay, once])
 
-  return { ref }
+  const style: CSSProperties = {
+    opacity: revealed ? 1 : 0,
+    transform: revealed ? 'translateY(0)' : 'translateY(20px)',
+    transition: 'opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)',
+    willChange: 'transform, opacity',
+  }
+
+  return { ref, style }
 }

@@ -2,7 +2,6 @@
 
 import { type ReactNode } from 'react'
 import { useScrollReveal } from '@/hooks/use-scroll-reveal'
-import { cn } from '@/utils/cn'
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -12,11 +11,9 @@ interface ScrollRevealProps {
 }
 
 /**
- * Wrapper that reveals its children with a GPU-composited CSS @keyframes
- * animation when they enter the viewport. Zero React re-renders for animation.
- *
- * The element starts with `opacity: 0` via `.wp-reveal` class.
- * When in viewport, `.is-revealed` is toggled, triggering the CSS animation.
+ * Wrapper that reveals its children with a smooth inline-style transition
+ * when they enter the viewport. Uses requestAnimationFrame to ensure
+ * the browser paints the hidden state before triggering the transition.
  */
 export function ScrollReveal({
   children,
@@ -24,14 +21,14 @@ export function ScrollReveal({
   delay = 0,
   className = '',
 }: ScrollRevealProps) {
-  const { ref } = useScrollReveal({ delay, once: true })
+  const { ref, style } = useScrollReveal({ delay, once: true })
+
+  // Direction is kept for API compatibility but all use translateY for now
+  // (the most natural scroll direction). Can be extended if needed.
+  void direction
 
   return (
-    <div
-      ref={ref}
-      className={cn('wp-reveal', `wp-reveal-${direction}`, className)}
-      style={delay > 0 ? { animationDelay: `${delay}ms` } : undefined}
-    >
+    <div ref={ref} style={style} className={className}>
       {children}
     </div>
   )
