@@ -122,6 +122,27 @@
       transform: scale(1);
     }
   }
+
+  /* Floating emoji animations */
+  --animate-float-slow: float-slow 8s ease-in-out infinite;
+  --animate-float-medium: float-medium 5s ease-in-out infinite;
+  --animate-float-fast: float-fast 3s ease-in-out infinite;
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33% { transform: translateY(-12px) rotate(3deg); }
+    66% { transform: translateY(6px) rotate(-2deg); }
+  }
+
+  @keyframes float-medium {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(4deg); }
+  }
+
+  @keyframes float-fast {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-6px) scale(1.1); }
+  }
 }
 
 @layer base {

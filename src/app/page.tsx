@@ -7,6 +7,7 @@ import {
   buttonVariants,
 } from '@/components/ui'
 import { CategoryCard } from '@/components/features/catalog/category-card'
+import { HeroBanner } from '@/components/features/shop/hero-banner'
 import { getCategories } from '@/services/catalog-service'
 import { getCurrentUser } from '@/lib/auth/dal'
 import { getRecentlyViewedProducts } from '@/services/social-service'
@@ -43,37 +44,7 @@ export default async function HomePage() {
   return (
     <main>
       <JsonLd data={organizationJsonLd()} />
-      <section className="border-b border-neutral-200 bg-gradient-to-b from-brand-50 via-neutral-50 to-neutral-50 dark:border-neutral-800 dark:from-brand-950/40 dark:via-neutral-950 dark:to-neutral-950">
-        <div className="container-wp flex flex-col items-center gap-6 py-16 text-center sm:py-24">
-          <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-800 dark:bg-brand-900 dark:text-brand-200">
-            {t.home.heroBadge}
-          </span>
-          <h1 className="font-display text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-5xl">
-            {t.home.heroTitle}
-            <br />
-            <span className="text-brand-600 dark:text-brand-300">
-              {t.home.heroSubtitle}
-            </span>
-          </h1>
-          <p className="max-w-xl text-neutral-600 dark:text-neutral-300">
-            {t.home.heroDescription}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/categories"
-              className={buttonVariants({ variant: 'primary', size: 'lg' })}
-            >
-              {t.home.startShopping}
-            </Link>
-            <Link
-              href="/search"
-              className={buttonVariants({ variant: 'outline', size: 'lg' })}
-            >
-              {t.common.search}
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroBanner />
 
       <section className="container-wp py-12">
         <SectionTitle
