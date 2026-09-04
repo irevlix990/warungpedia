@@ -36,10 +36,8 @@ export function HeroBanner() {
         <h1 className="max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight text-neutral-900 dark:text-neutral-50 sm:text-5xl lg:text-6xl">
           Belanja Lebih Mudah{' '}
           <span className="bg-gradient-to-r from-brand-600 via-brand-700 to-brand-800 bg-clip-text text-transparent dark:from-brand-300 dark:via-brand-400 dark:to-brand-500">
-            Bersama Warung
+            Bersama Warungpedia
           </span>
-          <br className="hidden sm:block" />
-          <span className="text-brand-600 dark:text-brand-400">pedia</span>
         </h1>
 
         {/* Subtitle */}
