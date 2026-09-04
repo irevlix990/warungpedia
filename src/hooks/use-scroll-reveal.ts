@@ -1,37 +1,31 @@
 'use client'
 
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 
 interface UseScrollRevealOptions {
-  /** Percentage of element visible before triggering (0–1) */
   threshold?: number
-  /** Distance in px the element travels during reveal */
-  offset?: number
-  /** Delay in ms before animation starts */
   delay?: number
-  /** Only trigger once */
   once?: boolean
 }
 
-interface ScrollRevealState {
+interface ScrollRevealReturn {
   ref: RefObject<HTMLDivElement | null>
-  isVisible: boolean
-  style: React.CSSProperties
 }
 
 /**
- * Ultra-smooth scroll reveal using IntersectionObserver.
- * Very subtle movement (≤20px) with generous duration (0.85s)
- * and a soft expo-out easing curve for a fluid, buttery feel.
+ * Registers an IntersectionObserver on the ref'd element and toggles
+ * a CSS class (`is-revealed`) so the browser's compositor handles
+ * the actual animation via @keyframes — zero React re-renders per frame.
+ *
+ * The element must have `wp-reveal wp-reveal-{direction}` classes
+ * pre-applied for the initial hidden state to take effect.
  */
 export function useScrollReveal({
   threshold = 0.1,
-  offset = 18,
   delay = 0,
   once = true,
-}: UseScrollRevealOptions = {}): ScrollRevealState {
+}: UseScrollRevealOptions = {}): ScrollRevealReturn {
   const ref = useRef<HTMLDivElement | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const el = ref.current
@@ -40,28 +34,22 @@ export function useScrollReveal({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
+          if (delay > 0) {
+            setTimeout(() => el.classList.add('is-revealed'), delay)
+          } else {
+            el.classList.add('is-revealed')
+          }
           if (once) observer.unobserve(el)
         } else if (!once) {
-          setIsVisible(false)
+          el.classList.remove('is-revealed')
         }
       },
-      { threshold, rootMargin: '0px 0px -40px 0px' }
+      { threshold, rootMargin: '0px 0px -30px 0px' }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [threshold, once])
+  }, [threshold, delay, once])
 
-  // Ultra-smooth: subtle slide + fade with a soft expo-out curve
-  const style: React.CSSProperties = {
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0) scale(1)' : `translateY(${offset}px) scale(0.985)`,
-    transition: [
-      `opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-      `transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-    ].join(', '),
-  }
-
-  return { ref, isVisible, style }
+  return { ref }
 }

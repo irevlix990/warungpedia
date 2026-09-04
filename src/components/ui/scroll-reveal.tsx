@@ -2,33 +2,21 @@
 
 import { type ReactNode } from 'react'
 import { useScrollReveal } from '@/hooks/use-scroll-reveal'
+import { cn } from '@/utils/cn'
 
 interface ScrollRevealProps {
   children: ReactNode
-  /** Animation direction */
   direction?: 'up' | 'down' | 'left' | 'right' | 'none'
-  /** Delay in ms */
   delay?: number
-  /** Additional CSS classes */
   className?: string
 }
 
-const OFFSET_MAP = {
-  up: 18,
-  down: -18,
-  left: 18,
-  right: -18,
-  none: 0,
-}
-
 /**
- * Wrapper component that reveals its children with a smooth animation
- * when they enter the viewport.
+ * Wrapper that reveals its children with a GPU-composited CSS @keyframes
+ * animation when they enter the viewport. Zero React re-renders for animation.
  *
- * Usage:
- *   <ScrollReveal direction="up" delay={100}>
- *     <SectionTitle ... />
- *   </ScrollReveal>
+ * The element starts with `opacity: 0` via `.wp-reveal` class.
+ * When in viewport, `.is-revealed` is toggled, triggering the CSS animation.
  */
 export function ScrollReveal({
   children,
@@ -36,17 +24,13 @@ export function ScrollReveal({
   delay = 0,
   className = '',
 }: ScrollRevealProps) {
-  const { ref, style } = useScrollReveal({
-    offset: OFFSET_MAP[direction],
-    delay,
-    once: true,
-  })
+  const { ref } = useScrollReveal({ delay, once: true })
 
   return (
     <div
       ref={ref}
-      style={style}
-      className={`will-change-transform ${className}`}
+      className={cn('wp-reveal', `wp-reveal-${direction}`, className)}
+      style={delay > 0 ? { animationDelay: `${delay}ms` } : undefined}
     >
       {children}
     </div>
