@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getDictionary } from '@/lib/i18n'
 import { Logo } from './logo'
+import { ScrollReveal } from '@/components/ui'
 
 /** Global site footer with curated links that all point to live routes. */
 export function Footer() {
@@ -8,6 +9,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+      <ScrollReveal direction="up" delay={0}>
       <div className="container-wp py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="max-w-sm space-y-3">
@@ -89,6 +91,7 @@ export function Footer() {
           <p className="font-mono">Rupiah (IDR) · Indonesia</p>
         </div>
       </div>
+      </ScrollReveal>
     </footer>
   )
 }

@@ -4,6 +4,7 @@ import {
   Card,
   EmptyState,
   SectionTitle,
+  ScrollReveal,
   buttonVariants,
 } from '@/components/ui'
 import { CategoryCard } from '@/components/features/catalog/category-card'
@@ -47,25 +48,28 @@ export default async function HomePage() {
       <HeroBanner />
 
       <section className="container-wp py-12">
-        <SectionTitle
-          title={t.home.trendingCategories}
-          action={
-            <Link
-              href="/categories"
-              className={buttonVariants({ variant: 'outline', size: 'sm' })}
-            >
-              {t.common.viewAll}
-            </Link>
-          }
-        />
+        <ScrollReveal direction="up">
+          <SectionTitle
+            title={t.home.trendingCategories}
+            action={
+              <Link
+                href="/categories"
+                className={buttonVariants({ variant: 'outline', size: 'sm' })}
+              >
+                {t.common.viewAll}
+              </Link>
+            }
+          />
+        </ScrollReveal>
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {popular.length > 0 ? (
-            popular.map((category) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                childCount={childrenOf(grouped, category.id).length}
-              />
+            popular.map((category, idx) => (
+              <ScrollReveal key={category.id} direction="up" delay={idx * 60}>
+                <CategoryCard
+                  category={category}
+                  childCount={childrenOf(grouped, category.id).length}
+                />
+              </ScrollReveal>
             ))
           ) : (
             <Card className="col-span-full p-6">
@@ -78,40 +82,48 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="container-wp">
-        <ProductShelf
-          title={t.social.recentlyViewed}
-          products={recentlyViewed}
-          t={t.product}
-        />
-      </section>
+      <ScrollReveal direction="up">
+        <section className="container-wp">
+          <ProductShelf
+            title={t.social.recentlyViewed}
+            products={recentlyViewed}
+            t={t.product}
+          />
+        </section>
+      </ScrollReveal>
 
       <section className="container-wp pb-16">
         <div className="grid gap-4 sm:grid-cols-3">
-          <Card className="p-6">
-            <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
-              {t.home.valueSafety}
-            </h3>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              {t.home.valueSafetyDesc}
-            </p>
-          </Card>
-          <Card className="p-6">
-            <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
-              {t.home.valueFast}
-            </h3>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              {t.home.valueFastDesc}
-            </p>
-          </Card>
-          <Card className="p-6">
-            <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
-              {t.home.valueEasyPayment}
-            </h3>
-            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-              {t.home.valueEasyPaymentDesc}
-            </p>
-          </Card>
+          <ScrollReveal direction="up" delay={0}>
+            <Card className="p-6">
+              <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
+                {t.home.valueSafety}
+              </h3>
+              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                {t.home.valueSafetyDesc}
+              </p>
+            </Card>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={80}>
+            <Card className="p-6">
+              <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
+                {t.home.valueFast}
+              </h3>
+              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                {t.home.valueFastDesc}
+              </p>
+            </Card>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={160}>
+            <Card className="p-6">
+              <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
+                {t.home.valueEasyPayment}
+              </h3>
+              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                {t.home.valueEasyPaymentDesc}
+              </p>
+            </Card>
+          </ScrollReveal>
         </div>
       </section>
     </main>

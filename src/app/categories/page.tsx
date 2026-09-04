@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Card, EmptyState } from '@/components/ui'
+import { Card, EmptyState, ScrollReveal } from '@/components/ui'
 import { CategoryCard } from '@/components/features/catalog/category-card'
 import { getCategories } from '@/services/catalog-service'
 import {
@@ -22,23 +22,26 @@ export default async function CategoriesPage() {
 
   return (
     <main className="container-wp py-10">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50">
-          {t.shop.categoriesTitle}
-        </h1>
-        <p className="text-neutral-500 dark:text-neutral-400">
-          {t.shop.categoriesSubtitle}
-        </p>
-      </div>
+      <ScrollReveal direction="up">
+        <div className="space-y-1">
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50">
+            {t.shop.categoriesTitle}
+          </h1>
+          <p className="text-neutral-500 dark:text-neutral-400">
+            {t.shop.categoriesSubtitle}
+          </p>
+        </div>
+      </ScrollReveal>
 
       {roots.length > 0 ? (
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {roots.map((category) => (
-            <CategoryCard
-              key={category.id}
-              category={category}
-              childCount={childrenOf(grouped, category.id).length}
-            />
+          {roots.map((category, idx) => (
+            <ScrollReveal key={category.id} direction="up" delay={idx * 50}>
+              <CategoryCard
+                category={category}
+                childCount={childrenOf(grouped, category.id).length}
+              />
+            </ScrollReveal>
           ))}
         </div>
       ) : (

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ScrollReveal } from '@/components/ui'
 import { getDictionary } from '@/lib/i18n'
 import { SignInForm } from '@/components/features/auth/sign-in-form'
 import { signInWithGoogleAction } from '@/app/actions/auth'
@@ -8,7 +9,8 @@ export default async function SignInPage() {
   const t = getDictionary()
 
   return (
-    <Card>
+    <ScrollReveal direction="up" delay={0}>
+      <Card>
       <CardHeader className="text-center">
         <CardTitle>{t.auth.signInTitle}</CardTitle>
         <CardDescription>{t.auth.signInSubtitle}</CardDescription>
@@ -57,5 +59,6 @@ export default async function SignInPage() {
         </p>
       </CardContent>
     </Card>
+    </ScrollReveal>
   )
 }
