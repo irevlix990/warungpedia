@@ -33,12 +33,16 @@ The name **Warungpedia** combines *"Warung"* (Indonesian for small shop/stall) w
 >
 > | | |
 > |---|---|
-> | **Copyright** | © 2026 **Warungpedia**. All rights reserved. |
-> | **Brand** | **Warungpedia™** is an original brand identity. The name, logo, design system, and brand palette (`crisp`, `blossom`, `lilac`, `royal`) are the intellectual property of the author. |
-> | **License** | This source code is licensed under the [MIT License](./LICENSE). You may study, learn from, and use this code for personal/educational purposes **with proper attribution**. |
-> | **Restriction** | **Repackaging, reselling, or commercial redistribution of this project — in whole or in part — as a competing product, SaaS offering, or marketplace template without explicit written permission is strictly prohibited and may constitute intellectual property infringement.** |
+> | **Copyright** | © 2026 **Warungpedia** ([irevlix990](https://github.com/irevlix990)). All rights reserved. |
+> | **License** | This project uses a **custom license** — see [LICENSE](./LICENSE). **NOT MIT.** |
+> | **Credit Required** | If you fork, modify, or redistribute this project, you **MUST** credit the original author: **irevlix990** with a link to the repository. |
+> | **No Selling** | **Dilarang menjual, mengomersilkan, atau mendistribusikan ulang proyek ini — secara keseluruhan atau sebagian — sebagai produk, template, SaaS, atau marketplace clone tanpa izin tertulis dari penulis.** |
+> | **Brand** | **Warungpedia™** adalah brand original. Nama, logo, dan visual identity **tidak boleh** digunakan tanpa izin tertulis. |
 >
-> *If you intend to use this project commercially or as a base for a product, please contact the author for licensing arrangements.*
+> **🇮🇩 Bahasa Indonesia:**
+> Proyek ini dilindungi hak cipta. Jika Anda ingin memodifikasi atau membagikan ulang, **wajib memberikan credit** kepada penulis asli ([irevlix990](https://github.com/irevlix990)). **Dilarang keras menjual atau mengomersilkan proyek ini tanpa izin tertulis.**
+>
+> *Untuk pertanyaan lisensi komersial, silakan buka issue atau hubungi penulis langsung.*
 
 ---
 
@@ -364,22 +368,25 @@ Built with ❤️ as a full-stack portfolio project demonstrating production-rea
 
 ## 📝 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+This project uses a **custom license** — see [LICENSE](./LICENSE) for full terms.
 
 ```
-MIT License — Copyright (c) 2026 Warungpedia
+Warungpedia — Custom License
+Copyright (c) 2026 Warungpedia (irevlix990)
 ```
 
 ### Usage Terms
 
-| ✅ Permitted | ❌ Prohibited |
+| ✅ Permitted (with credit) | ❌ Prohibited |
 |---|---|
 | Study and learn from the source code | Removing copyright / license notices |
-| Fork for personal learning & non-commercial use | Selling this code as a product or template |
-| Use with **proper attribution** (author + repo link) | Rebranding as your own marketplace product |
-| Contribute back via Pull Requests | Commercial SaaS redistribution without a license |
+| Fork for personal learning & non-commercial use | **Selling this code as a product or template** |
+| Modify and redistribute with **proper credit** (author + repo link) | **Commercial SaaS redistribution without written permission** |
+| Contribute back via Pull Requests | Rebranding as your own marketplace product |
 
-> **Important:** While MIT permits code reuse, the **Warungpedia™ brand, name, logo, and visual identity** are **NOT** covered by the MIT License and may **NOT** be used without written permission. For commercial licensing inquiries, please open an issue or contact the author directly.
+> **🇮🇩 Penting:** Proyek ini **BUKAN** lisensi MIT. Anda **WAJIB** memberikan credit jika memodifikasi atau membagikan ulang. **Dilarang menjual atau mengomersilkan** proyek ini tanpa izin tertulis dari penulis.
+>
+> **English:** This project is **NOT** MIT licensed. You **MUST** give credit if modifying or redistributing. **Selling or commercial use** of this project is prohibited without written permission from the author.
 
 ---
 

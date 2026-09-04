@@ -1,21 +1,57 @@
-MIT License
+Warungpedia — Custom License
+Copyright (c) 2026 Warungpedia (irevlix990)
 
-Copyright (c) 2026 Warungpedia
+This project is NOT covered by the MIT License despite any previous references.
+The terms below override any prior license notice in this repository.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+────────────────────────────────────────────────────────────────
+PERMITTED (with conditions)
+────────────────────────────────────────────────────────────────
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Study and learn from the source code.
+2. Fork for personal, educational, or non-commercial use.
+3. Modify and redistribute, provided that:
+   a. You give clear and prominent credit to the original author:
+      - Author: irevlix990 (https://github.com/irevlix990)
+      - Project: Warungpedia (https://github.com/irevlix990/warungpedia)
+   b. You include a copy of this license notice in all copies or
+      substantial portions of the Software.
+   c. You indicate what changes were made (if modified).
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+────────────────────────────────────────────────────────────────
+PROHIBITED — ABSOLUTELY NOT ALLOWED
+────────────────────────────────────────────────────────────────
+
+1. SELLING this code, in whole or in part, as a product, template,
+   SaaS offering, or marketplace clone — whether modified or not —
+   without explicit written permission from the author.
+
+2. COMMERCIAL REDISTRIBUTION as a competing product or service
+   without explicit written permission from the author.
+
+3. REBRANDING this project (or any derivative) as your own
+   marketplace product without proper attribution and permission.
+
+4. REMOVING or HIDING copyright notices, attribution, or this
+   license from any distribution.
+
+────────────────────────────────────────────────────────────────
+BRAND NOTICE
+────────────────────────────────────────────────────────────────
+
+"Warungpedia" and the Warungpedia logo/visual identity are
+original brand intellectual property of the author. The brand
+name and visual identity may NOT be used in any derivative work
+without explicit written permission.
+
+────────────────────────────────────────────────────────────────
+DISCLAIMER
+────────────────────────────────────────────────────────────────
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED. THE AUTHOR SHALL NOT BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+────────────────────────────────────────────────────────────────
+For commercial licensing inquiries, contact:
+  GitHub: https://github.com/irevlix990
