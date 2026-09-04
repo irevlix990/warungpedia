@@ -9,7 +9,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal delay={0}>
       <div className="container-wp py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="max-w-sm space-y-3">

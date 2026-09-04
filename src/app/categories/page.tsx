@@ -22,7 +22,7 @@ export default async function CategoriesPage() {
 
   return (
     <main className="container-wp py-10">
-      <ScrollReveal direction="up">
+      <ScrollReveal>
         <div className="space-y-1">
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50">
             {t.shop.categoriesTitle}
@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
       {roots.length > 0 ? (
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {roots.map((category, idx) => (
-            <ScrollReveal key={category.id} direction="up" delay={idx * 40}>
+            <ScrollReveal key={category.id} delay={idx * 40}>
               <CategoryCard
                 category={category}
                 childCount={childrenOf(grouped, category.id).length}

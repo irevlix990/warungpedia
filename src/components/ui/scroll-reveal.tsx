@@ -1,35 +1,37 @@
 'use client'
 
 import { type ReactNode } from 'react'
-import { useScrollReveal } from '@/hooks/use-scroll-reveal'
+import { motion } from 'framer-motion'
 
 interface ScrollRevealProps {
   children: ReactNode
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none'
   delay?: number
   className?: string
 }
 
 /**
- * Wrapper that reveals its children with a smooth inline-style transition
- * when they enter the viewport. Uses requestAnimationFrame to ensure
- * the browser paints the hidden state before triggering the transition.
+ * Scroll-reveal wrapper powered by Framer Motion.
+ * Uses spring physics for ultra-smooth scale + fade animation.
+ * GPU-accelerated by default.
  */
 export function ScrollReveal({
   children,
-  direction = 'up',
   delay = 0,
   className = '',
 }: ScrollRevealProps) {
-  const { ref, style } = useScrollReveal({ delay, once: true })
-
-  // Direction is kept for API compatibility but all use translateY for now
-  // (the most natural scroll direction). Can be extended if needed.
-  void direction
-
   return (
-    <div ref={ref} style={style} className={className}>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.92 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+        delay: delay / 1000,
+      }}
+      className={className}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }

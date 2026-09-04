@@ -48,7 +48,7 @@ export default async function HomePage() {
       <HeroBanner />
 
       <section className="container-wp py-12">
-        <ScrollReveal direction="up">
+        <ScrollReveal>
           <SectionTitle
             title={t.home.trendingCategories}
             action={
@@ -64,7 +64,7 @@ export default async function HomePage() {
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {popular.length > 0 ? (
             popular.map((category, idx) => (
-              <ScrollReveal key={category.id} direction="up" delay={idx * 40}>
+              <ScrollReveal key={category.id} delay={idx * 40}>
                 <CategoryCard
                   category={category}
                   childCount={childrenOf(grouped, category.id).length}
@@ -82,7 +82,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <ScrollReveal direction="up">
+      <ScrollReveal>
         <section className="container-wp">
           <ProductShelf
             title={t.social.recentlyViewed}
@@ -94,7 +94,7 @@ export default async function HomePage() {
 
       <section className="container-wp pb-16">
         <div className="grid gap-4 sm:grid-cols-3">
-          <ScrollReveal direction="up" delay={0}>
+          <ScrollReveal delay={0}>
             <Card className="p-6">
               <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
                 {t.home.valueSafety}
@@ -104,7 +104,7 @@ export default async function HomePage() {
               </p>
             </Card>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={60}>
+          <ScrollReveal delay={60}>
             <Card className="p-6">
               <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
                 {t.home.valueFast}
@@ -114,7 +114,7 @@ export default async function HomePage() {
               </p>
             </Card>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={120}>
+          <ScrollReveal delay={120}>
             <Card className="p-6">
               <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
                 {t.home.valueEasyPayment}

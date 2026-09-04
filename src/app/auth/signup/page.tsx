@@ -8,7 +8,7 @@ export default async function SignUpPage() {
   const t = getDictionary()
 
   return (
-    <ScrollReveal direction="up" delay={0}>
+    <ScrollReveal delay={0}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle>{t.auth.signUpTitle}</CardTitle>
