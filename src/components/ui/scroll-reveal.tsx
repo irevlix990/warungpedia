@@ -14,10 +14,10 @@ interface ScrollRevealProps {
 }
 
 const OFFSET_MAP = {
-  up: 40,
-  down: -40,
-  left: 40,
-  right: -40,
+  up: 18,
+  down: -18,
+  left: 18,
+  right: -18,
   none: 0,
 }
 

@@ -64,7 +64,7 @@ export default async function HomePage() {
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {popular.length > 0 ? (
             popular.map((category, idx) => (
-              <ScrollReveal key={category.id} direction="up" delay={idx * 60}>
+              <ScrollReveal key={category.id} direction="up" delay={idx * 40}>
                 <CategoryCard
                   category={category}
                   childCount={childrenOf(grouped, category.id).length}
@@ -104,7 +104,7 @@ export default async function HomePage() {
               </p>
             </Card>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={80}>
+          <ScrollReveal direction="up" delay={60}>
             <Card className="p-6">
               <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
                 {t.home.valueFast}
@@ -114,7 +114,7 @@ export default async function HomePage() {
               </p>
             </Card>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={160}>
+          <ScrollReveal direction="up" delay={120}>
             <Card className="p-6">
               <h3 className="font-display text-base font-bold text-neutral-900 dark:text-neutral-50">
                 {t.home.valueEasyPayment}

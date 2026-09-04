@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
       {roots.length > 0 ? (
         <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {roots.map((category, idx) => (
-            <ScrollReveal key={category.id} direction="up" delay={idx * 50}>
+            <ScrollReveal key={category.id} direction="up" delay={idx * 40}>
               <CategoryCard
                 category={category}
                 childCount={childrenOf(grouped, category.id).length}

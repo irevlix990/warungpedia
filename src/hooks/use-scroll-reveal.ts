@@ -20,14 +20,13 @@ interface ScrollRevealState {
 }
 
 /**
- * Lightweight hook that uses IntersectionObserver to detect when an element
- * enters the viewport and applies a smooth reveal animation via inline styles.
- *
- * Returns a ref and computed visibility + style props.
+ * Ultra-smooth scroll reveal using IntersectionObserver.
+ * Very subtle movement (≤20px) with generous duration (0.85s)
+ * and a soft expo-out easing curve for a fluid, buttery feel.
  */
 export function useScrollReveal({
-  threshold = 0.15,
-  offset = 40,
+  threshold = 0.1,
+  offset = 18,
   delay = 0,
   once = true,
 }: UseScrollRevealOptions = {}): ScrollRevealState {
@@ -47,17 +46,21 @@ export function useScrollReveal({
           setIsVisible(false)
         }
       },
-      { threshold, rootMargin: '0px 0px -60px 0px' }
+      { threshold, rootMargin: '0px 0px -40px 0px' }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
   }, [threshold, once])
 
+  // Ultra-smooth: subtle slide + fade with a soft expo-out curve
   const style: React.CSSProperties = {
     opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0)' : `translateY(${offset}px)`,
-    transition: `opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+    transform: isVisible ? 'translateY(0) scale(1)' : `translateY(${offset}px) scale(0.985)`,
+    transition: [
+      `opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+      `transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+    ].join(', '),
   }
 
   return { ref, isVisible, style }
