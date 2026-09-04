@@ -11,6 +11,8 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Tests_327-22C55E?style=flat-square)
 
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-warungpedia.vercel.app-8C56D4?style=for-the-badge&logo=vercel&logoColor=white)](https://warungpedia.vercel.app)
+
 [English](./README.md) · [Bahasa Indonesia](./README.id.md)
 
 </div>
@@ -25,7 +27,7 @@
 
 The name **Warungpedia** combines *"Warung"* (Indonesian for small shop/stall) with *"-pedia"* (encyclopedia) — symbolizing a comprehensive digital marketplace for Indonesian small businesses.
 
-[🌐 **Live Demo**](#-live-demo) · [📖 [Bahasa Indonesia](./README.id.md)]
+[🌐 **Live Demo**](https://warungpedia.vercel.app) · [📖 [Bahasa Indonesia](./README.id.md)]
 
 ---
 
@@ -62,9 +64,9 @@ Warungpedia was built as a **portfolio-grade, production-ready project** to demo
 
 ## 🌐 Live Demo
 
-> 🚀 **Coming soon after Vercel deployment!**
+> ### 👉 **[https://warungpedia.vercel.app](https://warungpedia.vercel.app)** 👈
 >
-> The application will be deployed at: **`https://warungpedia.vercel.app`**
+> Klik link di atas untuk langsung mencoba versi live!
 >
 > **Demo Accounts:**
 > | Role | Email | Password |
@@ -283,7 +285,7 @@ npm run build        # Next.js production build → successful
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/warungpedia.git
+git clone https://github.com/irevlix990/warungpedia.git
 cd warungpedia
 
 # Install dependencies
