@@ -147,15 +147,17 @@ alter table public.addresses enable row level security;
 alter table public.settings enable row level security;
 
 -- --- profiles policies ------------------------------------------
--- Users can read/update their own profile. Admins can read/update all.
+-- Users can read/update their own profile. Admin access uses the
+-- service-role client (bypasses RLS), so no current_role() here —
+-- calling it would recurse (current_role reads profiles).
 create policy "profiles_select_own"
   on public.profiles for select
-  using (id = auth.uid() or public.current_role() in ('ADMIN','SUPER_ADMIN'));
+  using (id = auth.uid());
 
 create policy "profiles_update_own"
   on public.profiles for update
-  using (id = auth.uid() or public.current_role() in ('ADMIN','SUPER_ADMIN'))
-  with check (id = auth.uid() or public.current_role() in ('ADMIN','SUPER_ADMIN'));
+  using (id = auth.uid())
+  with check (id = auth.uid());
 
 -- Insert is handled by the auth trigger; block direct inserts from RLS.
 create policy "profiles_no_insert"

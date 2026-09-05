@@ -171,20 +171,14 @@ alter table public.profiles enable row level security;
 alter table public.addresses enable row level security;
 alter table public.settings enable row level security;
 
-create policy "profiles_select_public"
+create policy "profiles_select_own"
   on public.profiles for select
-  using (
-    id = auth.uid()
-    or public.current_role() in ('ADMIN','SUPER_ADMIN')
-  );
+  using (id = auth.uid());
 
 create policy "profiles_update_own"
   on public.profiles for update
-  using (id = auth.uid() or public.current_role() in ('ADMIN','SUPER_ADMIN'))
-  with check (
-    (id = auth.uid() and role = (select role from public.profiles where id = auth.uid()))
-    or public.current_role() in ('ADMIN','SUPER_ADMIN')
-  );
+  using (id = auth.uid())
+  with check (id = auth.uid());
 
 create policy "addresses_all_owner"
   on public.addresses for all

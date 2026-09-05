@@ -1,6 +1,6 @@
 import 'server-only'
 import { cache } from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import {
   requirePermission,
   requireSuperAdmin,
@@ -39,7 +39,7 @@ interface DbUserRow {
 /** Admin dashboard aggregate KPIs. */
 export async function getAdminStats(): Promise<AdminStats> {
   await requirePermission('VIEW_ANALYTICS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase.rpc('admin_dashboard_stats')
   if (error) {
     throw new Error(`Gagal memuat statistik: ${error.message}`)
@@ -71,7 +71,7 @@ export async function getAdminStats(): Promise<AdminStats> {
 /** Admin: all users (emails joined from auth.users). */
 export async function getAdminUsers(): Promise<AdminUser[]> {
   await requirePermission('MANAGE_USERS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase.rpc('admin_list_users')
   if (error) {
     throw new Error(`Gagal memuat pengguna: ${error.message}`)
@@ -95,7 +95,7 @@ export async function setAdminUserRole(
   role: Role
 ): Promise<void> {
   await requireSuperAdmin()
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { error } = await supabase.rpc('admin_set_user_role', {
     p_user_id: userId,
     p_role: role,
@@ -139,7 +139,7 @@ export async function getAdminProducts(
   term?: string
 ): Promise<AdminProduct[]> {
   await requirePermission('MODERATE_PRODUCTS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   let query = supabase
     .from('products')
     .select('*, stores(name), categories(name)')
@@ -164,7 +164,7 @@ export async function moderateProduct(
   input: ProductModerationInput
 ): Promise<void> {
   await requirePermission('MODERATE_PRODUCTS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const patch: Partial<
     Pick<ProductRow, 'status' | 'is_featured'>
   > = {}
@@ -190,7 +190,7 @@ export async function getAdminOrders(
   status?: OrderStatus
 ): Promise<AdminOrder[]> {
   await requirePermission('MANAGE_ORDERS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
 
   let query = supabase
     .from('orders')
@@ -254,7 +254,7 @@ export async function getAdminReviews(
   status?: 'ACTIVE' | 'HIDDEN'
 ): Promise<(ProductReview & { productName: string | null })[]> {
   await requirePermission('MODERATE_PRODUCTS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   let query = supabase
     .from('product_reviews')
     .select('*, products(name)')
@@ -307,7 +307,7 @@ function mapCategory(row: CategoryRow): Category {
 /** Admin: all categories (including inactive). */
 export async function getAllCategories(): Promise<Category[]> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('categories')
     .select('*')
@@ -323,7 +323,7 @@ export async function getCategoryById(
   id: string
 ): Promise<Category | null> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('categories')
     .select('*')
@@ -338,7 +338,7 @@ export async function getCategoryById(
 /** Admin: create a category. */
 export async function createCategory(input: CategoryInput): Promise<string> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('categories')
     .insert({
@@ -364,7 +364,7 @@ export async function updateCategory(
   input: CategoryInput
 ): Promise<void> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { error } = await supabase
     .from('categories')
     .update({
@@ -387,7 +387,7 @@ export async function setCategoryActive(
   active: boolean
 ): Promise<void> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { error } = await supabase
     .from('categories')
     .update({ is_active: active })
@@ -405,7 +405,7 @@ export async function setCategoryActive(
 export const getSiteSetting = cache(
   async (key: string): Promise<string | null> => {
     await requirePermission('MANAGE_CMS')
-    const supabase = await createClient()
+    const supabase = createServiceRoleClient()
     const { data, error } = await supabase
       .from('settings')
       .select('value')
@@ -424,7 +424,7 @@ export async function getSiteSettings(): Promise<
   { key: string; value: string | null; description: string | null }[]
 > {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('settings')
     .select('key, value, description')
@@ -446,7 +446,7 @@ export async function setSiteSetting(
   description?: string | null
 ): Promise<void> {
   await requirePermission('MANAGE_CMS')
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const row: SettingInsert = { key, value }
   if (description !== undefined) row.description = description
   const { error } = await supabase.from('settings').upsert(row)
@@ -462,7 +462,7 @@ export async function getPublicSiteSettings(): Promise<{
   supportEmail: string
   about: string
 }> {
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase
     .from('settings')
     .select('key, value')
