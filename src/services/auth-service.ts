@@ -25,7 +25,7 @@ export async function signUpWithEmail(input: {
     password: input.password,
     options: {
       data: { full_name: input.fullName },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/auth/verify`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/auth/callback?next=/`,
     },
   })
   if (error) throw new ValidationError(mapAuthError(error.message))
@@ -77,7 +77,7 @@ export async function resendVerificationEmail(email: string) {
     type: 'signup',
     email,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/auth/verify`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/auth/callback?next=/`,
     },
   })
   if (error) throw new ValidationError(mapAuthError(error.message))
