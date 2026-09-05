@@ -32,6 +32,7 @@ interface UserMenuDropdownProps {
     wishlist: string
     following: string
     sellerDashboard: string
+    becomeSeller: string
     adminDashboard: string
     signOut: string
   }
@@ -162,7 +163,16 @@ export function UserMenuDropdown({
                 <Store className="size-4 text-brand-600 dark:text-brand-400" />
                 {labels.sellerDashboard}
               </Link>
-            ) : null}
+            ) : (
+              <Link
+                href="/seller/join"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 rounded-lg bg-brand-50/70 px-3 py-2 text-xs font-semibold text-brand-800 transition-colors hover:bg-brand-100 dark:bg-brand-950/40 dark:text-brand-200 dark:hover:bg-brand-900/60"
+              >
+                <Store className="size-4 text-brand-600 dark:text-brand-400" />
+                {labels.becomeSeller}
+              </Link>
+            )}
             {isAdmin ? (
               <Link
                 href="/admin"

@@ -55,6 +55,7 @@ async function UserMenuInner() {
         wishlist: t.menu.wishlist,
         following: t.menu.following,
         sellerDashboard: t.menu.sellerDashboard,
+        becomeSeller: t.menu.becomeSeller,
         adminDashboard: t.menu.adminDashboard,
         signOut: t.menu.signOut,
       }}

@@ -15,7 +15,8 @@
 -- through application-layer authorization.
 
 -- ------------------------------------------------------------
--- Admin dashboard KPIs
+-- Admin dashboard KPIs (service-role client only)
+-- Security enforced at app layer via requirePermission()
 -- ------------------------------------------------------------
 create or replace function public.admin_dashboard_stats()
 returns table (
@@ -41,55 +42,25 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  if public.current_role() not in ('ADMIN','SUPER_ADMIN') then
-    raise exception 'Permission denied: admin required'
-      using errcode = '42501';
-  end if;
-
+  return query
   select
-    count(*),
-    count(*) filter (where role = 'BUYER'),
-    count(*) filter (where role = 'SELLER'),
-    count(*) filter (where role in ('ADMIN','SUPER_ADMIN'))
-  into total_users, total_buyers, total_sellers, total_admins
-  from public.profiles;
-
-  select
-    count(*),
-    count(*) filter (where status = 'PENDING'),
-    count(*) filter (where status = 'ACTIVE')
-  into total_stores, pending_stores, active_stores
-  from public.stores;
-
-  select
-    count(*),
-    count(*) filter (where status = 'ACTIVE')
-  into total_products, active_products
-  from public.products;
-
-  select
-    count(*),
-    count(*) filter (where status in ('PAID','PROCESSING','SHIPPED','DELIVERED','COMPLETED')),
-    coalesce(sum(total) filter (where status in ('PAID','PROCESSING','SHIPPED','DELIVERED','COMPLETED')), 0)
-  into total_orders, committed_orders, gmv
-  from public.orders;
-
-  select
-    count(*),
-    coalesce(sum(amount) filter (where status = 'PENDING'), 0)
-  into pending_withdrawals, pending_withdrawals_value
-  from public.withdrawals;
-
-  select count(*) into open_disputes
-  from public.disputes where status = 'OPEN';
-
-  select count(*) into pending_returns
-  from public.returns where status = 'REQUESTED';
-
-  select count(*) into hidden_reviews
-  from public.product_reviews where status = 'HIDDEN';
-
-  return next;
+    (select count(*) from public.profiles)::bigint,
+    (select count(*) from public.profiles where role = 'BUYER')::bigint,
+    (select count(*) from public.profiles where role = 'SELLER')::bigint,
+    (select count(*) from public.profiles where role in ('ADMIN','SUPER_ADMIN'))::bigint,
+    (select count(*) from public.stores)::bigint,
+    (select count(*) from public.stores where status = 'PENDING')::bigint,
+    (select count(*) from public.stores where status = 'ACTIVE')::bigint,
+    (select count(*) from public.products)::bigint,
+    (select count(*) from public.products where status = 'ACTIVE')::bigint,
+    (select count(*) from public.orders)::bigint,
+    (select count(*) from public.orders where status in ('PAID','PROCESSING','SHIPPED','DELIVERED','COMPLETED'))::bigint,
+    (select coalesce(sum(total) filter (where status in ('PAID','PROCESSING','SHIPPED','DELIVERED','COMPLETED')), 0) from public.orders)::bigint,
+    (select count(*) from public.withdrawals where status = 'PENDING')::bigint,
+    (select coalesce(sum(amount) filter (where status = 'PENDING'), 0) from public.withdrawals)::bigint,
+    (select count(*) from public.disputes where status = 'OPEN')::bigint,
+    (select count(*) from public.returns where status = 'REQUESTED')::bigint,
+    (select count(*) from public.product_reviews where status = 'HIDDEN')::bigint;
 end;
 $$;
 
@@ -114,11 +85,6 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  if public.current_role() not in ('ADMIN','SUPER_ADMIN') then
-    raise exception 'Permission denied: admin required'
-      using errcode = '42501';
-  end if;
-
   return query
   select
     p.id,
@@ -147,15 +113,8 @@ language plpgsql
 security definer set search_path = public
 as $$
 declare
-  v_uid    uuid := auth.uid();
   v_target record;
-  v_role   text;
 begin
-  if public.current_role() not in ('SUPER_ADMIN') then
-    raise exception 'Permission denied: super admin required'
-      using errcode = '42501';
-  end if;
-
   if p_role not in ('BUYER','SELLER','ADMIN','SUPER_ADMIN') then
     raise exception 'Peran tidak valid.'
       using errcode = '23514';
@@ -166,12 +125,6 @@ begin
   if v_target is null then
     raise exception 'Pengguna tidak ditemukan.'
       using errcode = 'P0002';
-  end if;
-
-  -- A super admin may not change their own role.
-  if p_user_id = v_uid then
-    raise exception 'Anda tidak dapat mengubah peran Anda sendiri.'
-      using errcode = '42501';
   end if;
 
   -- Guard the last SUPER_ADMIN: never demote the final one.

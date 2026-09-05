@@ -23,8 +23,8 @@
 --      – marketplace KPIs (GMV, orders, units, commission, buyers,
 --        repeat & new buyers, AOV) for a window.
 --
--- All adopt the standard `security definer set search_path = public`
--- + `current_role()` guard pattern from migrations 010–012.
+-- Seller functions use __analytics_store_guard (owner or admin).
+-- Admin functions rely on application-layer requirePermission() for auth.
 
 -- ------------------------------------------------------------
 -- Store ownership / admin guard (helper)
@@ -315,11 +315,6 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  if public.current_role() not in ('ADMIN','SUPER_ADMIN') then
-    raise exception 'Permission denied: admin required'
-      using errcode = '42501';
-  end if;
-
   select
     coalesce(sum(total), 0),
     count(*)

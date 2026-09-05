@@ -14,7 +14,7 @@ export default async function SellerDashboardPage() {
 
   const store = await getStoreByOwner(user.id).catch(() => null)
 
-  if (!store) redirect('/seller/apply')
+  if (!store) redirect('/seller/status')
 
   if (store.status !== 'ACTIVE') redirect('/seller/status')
 

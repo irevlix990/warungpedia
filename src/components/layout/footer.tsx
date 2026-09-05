@@ -80,6 +80,14 @@ export function Footer() {
                   {t.footer.accountProfile}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/seller/join"
+                  className="text-neutral-600 hover:text-brand-600 dark:text-neutral-300 dark:hover:text-brand-300"
+                >
+                  {t.footer.becomeSeller}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

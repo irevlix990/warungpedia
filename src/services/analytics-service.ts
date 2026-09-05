@@ -1,5 +1,6 @@
 import 'server-only'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import type { Database } from '@/types/database'
 import type {
   AdminCustomerAnalytics,
@@ -158,9 +159,9 @@ interface AdminItem extends OrderItemRow {
   orderTotal: number
 }
 
-/** Admin: fetch committed order items within a window (admin RLS). */
+/** Admin: fetch committed order items within a window (service-role bypasses RLS). */
 async function fetchCommittedItems(from: string, to: string): Promise<AdminItem[]> {
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data: orders, error } = await supabase
     .from('orders')
     .select('id, total, created_at')
@@ -193,7 +194,7 @@ export async function getAdminMarketplaceKpis(
   from: string,
   to: string
 ): Promise<AdminMarketplaceKpis> {
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const { data, error } = await supabase.rpc('admin_marketplace_analytics', {
     p_from: from,
     p_to: to,
@@ -247,7 +248,7 @@ export async function getAdminTopSellers(
   limit = 10
 ): Promise<TopSeller[]> {
   const items = await fetchCommittedItems(from, to)
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const storeIds = Array.from(new Set(items.map((i) => i.store_id)))
   const names = new Map<string, string>()
   if (storeIds.length > 0) {

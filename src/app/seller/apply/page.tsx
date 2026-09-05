@@ -10,8 +10,12 @@ export default async function SellerApplyPage() {
   if (!user) redirect('/auth/signin')
 
   if (user.role !== 'BUYER') {
-    const store = await getStoreByOwner(user.id).catch(() => null)
-    if (store) redirect('/seller/status')
+    redirect('/seller/status')
+  }
+
+  const existing = await getStoreByOwner(user.id).catch(() => null)
+  if (existing) {
+    redirect('/seller/status')
   }
 
   return (
