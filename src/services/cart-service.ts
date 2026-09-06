@@ -41,6 +41,7 @@ export const getCartForUser = cache(async (): Promise<Cart> => {
     .from('carts')
     .select('id')
     .maybeSingle()
+
   if (cartError) {
     throw new Error('Gagal memuat keranjang.')
   }
@@ -52,6 +53,7 @@ export const getCartForUser = cache(async (): Promise<Cart> => {
     .from('cart_items')
     .select('id, quantity, product_id')
     .eq('cart_id', cart.id)
+
   if (error) {
     throw new Error('Gagal memuat keranjang.')
   }
@@ -62,11 +64,12 @@ export const getCartForUser = cache(async (): Promise<Cart> => {
   }
 
   const productIds = rows.map((r) => r.product_id)
+
   const { data: products, error: productError } = await supabase
     .from('products')
     .select('*')
     .in('id', productIds)
-    .eq('status', 'ACTIVE')
+
   if (productError) {
     throw new Error('Gagal memuat produk di keranjang.')
   }
@@ -78,6 +81,7 @@ export const getCartForUser = cache(async (): Promise<Cart> => {
     .from('stores')
     .select('id, slug')
     .in('id', storeIds)
+
   if (storesError) {
     throw new Error('Gagal memuat produk di keranjang.')
   }
@@ -92,8 +96,7 @@ export const getCartForUser = cache(async (): Promise<Cart> => {
   for (const row of rows) {
     const product = productById.get(row.product_id)
     if (!product) continue
-    const storeSlug = storeSlugById.get(row.product_id)
-    if (!storeSlug) continue
+    const storeSlug = storeSlugById.get(product.store_id) ?? 'unavailable'
     const mapped = mapProduct(product)
     const sale = activeFlash.get(row.product_id)
     if (sale) {
