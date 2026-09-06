@@ -128,6 +128,7 @@ export type Database = {
           phone: string
           street: string
           district: string | null
+          village: string | null
           city: string
           province: string
           postal_code: string | null
@@ -146,6 +147,7 @@ export type Database = {
           phone: string
           street: string
           district?: string | null
+          village?: string | null
           city: string
           province: string
           postal_code?: string | null
@@ -164,6 +166,7 @@ export type Database = {
           phone?: string
           street?: string
           district?: string | null
+          village?: string | null
           city?: string
           province?: string
           postal_code?: string | null

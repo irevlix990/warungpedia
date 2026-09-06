@@ -73,6 +73,40 @@ export function resolveCityName(id: string): string {
   return regency?.name ?? id
 }
 
+/** Reverse-resolve a province name to its ID. */
+export function resolveProvinceId(name: string): string {
+  return PROVINCES.find((p) => p.name === name)?.id ?? ''
+}
+
+/** Reverse-resolve a city/regency name to its ID. */
+export function resolveCityId(name: string): string {
+  return REGENCIES.find((r) => r.name === name)?.id ?? ''
+}
+
+/**
+ * Split a `"id|name"` value (as emitted by CascadingAddressSelect) into
+ * its parts. Falls back to treating the raw string as the ID.
+ */
+export function splitIdName(raw: string): { id: string; name: string } {
+  const idx = raw.indexOf('|')
+  if (idx === -1) return { id: raw, name: '' }
+  return { id: raw.slice(0, idx), name: raw.slice(idx + 1) }
+}
+
+/**
+ * Extract the display name from a `"id|name"` value. If the value has no
+ * `|` separator it is treated as a raw ID and resolved via the bundled
+ * province/city data; otherwise the name part is returned as-is.
+ */
+export function displayName(
+  raw: string,
+  kind: 'province' | 'city'
+): string {
+  const { id, name } = splitIdName(raw)
+  if (name) return name
+  return kind === 'province' ? resolveProvinceName(id) : resolveCityName(id)
+}
+
 /** Districts for a regency — fetched on-demand from the API. */
 export async function getDistricts(regencyId: string): Promise<District[]> {
   const res = await fetch(

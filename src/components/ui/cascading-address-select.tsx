@@ -7,6 +7,8 @@ import {
   getRegenciesByProvince,
   getDistricts,
   getVillages,
+  resolveProvinceId,
+  resolveCityId,
   type District,
   type Village,
 } from '@/data/indonesia'
@@ -27,7 +29,7 @@ interface CascadingAddressSelectProps {
     district: string
     village: string
   }
-  /** Initial values (existing store data). */
+  /** Initial values (existing data). */
   value?: Partial<AddressValue>
   /** Labels for each level. */
   labels: {
@@ -42,12 +44,22 @@ interface CascadingAddressSelectProps {
 const selectClass =
   'h-10 w-full appearance-none rounded-lg border border-neutral-300 bg-white px-3 pr-8 text-sm text-neutral-900 shadow-soft focus:border-brand-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/30 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100'
 
+/** Split `"id|name"` into { id, name }. Falls back to raw as id. */
+function splitIdName(raw: string): { id: string; name: string } {
+  const idx = raw.indexOf('|')
+  if (idx === -1) return { id: raw, name: '' }
+  return { id: raw.slice(0, idx), name: raw.slice(idx + 1) }
+}
+
 /**
  * Cascading Indonesian address selector: Province → City → District → Village.
  *
  * Province & city come from bundled data; district & village are fetched
  * on-demand from the emsifa API. Selecting a province filters the city list,
  * selecting a city loads its districts, etc.
+ *
+ * Each hidden input emits `"id|name"` so the consumer can store both the
+ * machine-readable ID and the human-readable display name.
  */
 export function CascadingAddressSelect({
   names,
@@ -55,44 +67,104 @@ export function CascadingAddressSelect({
   labels,
   className,
 }: CascadingAddressSelectProps) {
-  const [province, setProvince] = React.useState(value?.province ?? '')
-  const [city, setCity] = React.useState(value?.city ?? '')
-  const [district, setDistrict] = React.useState(value?.district ?? '')
-  const [village, setVillage] = React.useState(value?.village ?? '')
+  const initProvince = splitIdName(value?.province ?? '')
+  const initCity = splitIdName(value?.city ?? '')
+  const initDistrict = splitIdName(value?.district ?? '')
+  const initVillage = splitIdName(value?.village ?? '')
+
+  // When the DB stores plain names (no "|"), reverse-resolve to IDs.
+  const resolvedProvinceId =
+    initProvince.id && !initProvince.name
+      ? resolveProvinceId(initProvince.id) || initProvince.id
+      : initProvince.id
+  const resolvedCityId =
+    initCity.id && !initCity.name
+      ? resolveCityId(initCity.id) || initCity.id
+      : initCity.id
+
+  const [province, setProvince] = React.useState(resolvedProvinceId)
+  const [city, setCity] = React.useState(resolvedCityId)
+  const [district, setDistrict] = React.useState(initDistrict.id)
+  const [village, setVillage] = React.useState(initVillage.id)
+
+  // Display names (emitted alongside IDs)
+  const [provinceName, setProvinceName] = React.useState(
+    initProvince.name || initProvince.id
+  )
+  const [cityName, setCityName] = React.useState(
+    initCity.name || initCity.id
+  )
+  const [districtName, setDistrictName] = React.useState(
+    initDistrict.name || initDistrict.id
+  )
+  const [villageName, setVillageName] = React.useState(
+    initVillage.name || initVillage.id
+  )
 
   const [districts, setDistricts] = React.useState<District[]>([])
   const [villages, setVillages] = React.useState<Village[]>([])
   const [loadingDistricts, setLoadingDistricts] = React.useState(
-    Boolean(value?.city)
+    Boolean(resolvedCityId)
   )
-  const [loadingVillages, setLoadingVillages] = React.useState(false)
+  const [loadingVillages, setLoadingVillages] = React.useState(
+    Boolean(initDistrict.id)
+  )
 
   const cities = province ? getRegenciesByProvince(province) : []
 
   // Pre-load districts when initialized with a city value (edit mode)
   React.useEffect(() => {
-    if (value?.city) {
-      getDistricts(value.city).then((data) => {
+    if (resolvedCityId) {
+      getDistricts(resolvedCityId).then((data) => {
         setDistricts(data)
         setLoadingDistricts(false)
+        // Auto-resolve district name if not provided
+        if (initDistrict.id && !initDistrict.name) {
+          const match = data.find((d) => d.id === initDistrict.id)
+          if (match) setDistrictName(match.name)
+        }
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleProvince = (id: string) => {
+  // Also pre-load villages when initialized with a district value
+  React.useEffect(() => {
+    if (initDistrict.id) {
+      getVillages(initDistrict.id).then((data) => {
+        setVillages(data)
+        setLoadingVillages(false)
+        if (initVillage.id && !initVillage.name) {
+          const match = data.find((v) => v.id === initVillage.id)
+          if (match) setVillageName(match.name)
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleProvince = (raw: string) => {
+    const { id, name } = splitIdName(raw)
     setProvince(id)
+    setProvinceName(name)
     setCity('')
+    setCityName('')
     setDistrict('')
+    setDistrictName('')
     setVillage('')
+    setVillageName('')
     setDistricts([])
     setVillages([])
   }
 
-  const handleCity = async (id: string) => {
+  const handleCity = async (raw: string) => {
+    const { id, name } = splitIdName(raw)
     setCity(id)
+    setCityName(name)
     setDistrict('')
+    setDistrictName('')
     setVillage('')
+    setVillageName('')
     setVillages([])
     if (!id) {
       setDistricts([])
@@ -107,9 +179,12 @@ export function CascadingAddressSelect({
     }
   }
 
-  const handleDistrict = async (id: string) => {
+  const handleDistrict = async (raw: string) => {
+    const { id, name } = splitIdName(raw)
     setDistrict(id)
+    setDistrictName(name)
     setVillage('')
+    setVillageName('')
     if (!id) {
       setVillages([])
       return
@@ -123,6 +198,14 @@ export function CascadingAddressSelect({
     }
   }
 
+  const handleVillage = (raw: string) => {
+    const { id, name } = splitIdName(raw)
+    setVillage(id)
+    setVillageName(name)
+  }
+
+  const enc = (id: string, name: string) => (id ? `${id}|${name}` : '')
+
   return (
     <div className={cn('grid grid-cols-1 gap-4 sm:grid-cols-2', className)}>
       {/* Province */}
@@ -132,13 +215,13 @@ export function CascadingAddressSelect({
         </label>
         <div className="relative">
           <select
-            value={province}
+            value={enc(province, provinceName)}
             onChange={(e) => handleProvince(e.target.value)}
             className={selectClass}
           >
             <option value="">— Pilih Provinsi —</option>
             {PROVINCES.map((p) => (
-              <option key={p.id} value={p.id}>
+              <option key={p.id} value={`${p.id}|${p.name}`}>
                 {p.name}
               </option>
             ))}
@@ -154,14 +237,14 @@ export function CascadingAddressSelect({
         </label>
         <div className="relative">
           <select
-            value={city}
+            value={enc(city, cityName)}
             onChange={(e) => handleCity(e.target.value)}
             disabled={!province}
             className={selectClass}
           >
             <option value="">— Pilih Kota/Kabupaten —</option>
             {cities.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={`${c.id}|${c.name}`}>
                 {c.name}
               </option>
             ))}
@@ -177,7 +260,7 @@ export function CascadingAddressSelect({
         </label>
         <div className="relative">
           <select
-            value={district}
+            value={enc(district, districtName)}
             onChange={(e) => handleDistrict(e.target.value)}
             disabled={!city || loadingDistricts}
             className={selectClass}
@@ -186,7 +269,7 @@ export function CascadingAddressSelect({
               {loadingDistricts ? 'Memuat...' : '— Pilih Kecamatan —'}
             </option>
             {districts.map((d) => (
-              <option key={d.id} value={d.id}>
+              <option key={d.id} value={`${d.id}|${d.name}`}>
                 {d.name}
               </option>
             ))}
@@ -206,8 +289,8 @@ export function CascadingAddressSelect({
         </label>
         <div className="relative">
           <select
-            value={village}
-            onChange={(e) => setVillage(e.target.value)}
+            value={enc(village, villageName)}
+            onChange={(e) => handleVillage(e.target.value)}
             disabled={!district || loadingVillages}
             className={selectClass}
           >
@@ -215,7 +298,7 @@ export function CascadingAddressSelect({
               {loadingVillages ? 'Memuat...' : '— Pilih Kelurahan/Desa —'}
             </option>
             {villages.map((v) => (
-              <option key={v.id} value={v.id}>
+              <option key={v.id} value={`${v.id}|${v.name}`}>
                 {v.name}
               </option>
             ))}
@@ -228,11 +311,11 @@ export function CascadingAddressSelect({
         </div>
       </div>
 
-      {/* Hidden inputs — store the selected IDs */}
-      <input type="hidden" name={names.province} value={province} />
-      <input type="hidden" name={names.city} value={city} />
-      <input type="hidden" name={names.district} value={district} />
-      <input type="hidden" name={names.village} value={village} />
+      {/* Hidden inputs — emit "id|name" for each level */}
+      <input type="hidden" name={names.province} value={enc(province, provinceName)} />
+      <input type="hidden" name={names.city} value={enc(city, cityName)} />
+      <input type="hidden" name={names.district} value={enc(district, districtName)} />
+      <input type="hidden" name={names.village} value={enc(village, villageName)} />
     </div>
   )
 }

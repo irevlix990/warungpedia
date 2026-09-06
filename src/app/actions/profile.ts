@@ -55,8 +55,9 @@ export async function updateProfileAction(
 
 /**
  * Parse latitude / longitude from FormData along with address fields.
- * Province, city, district, village are stored as IDs from the cascading
- * select and resolved to display names in the UI layer.
+ * Province, city, district, village arrive as `"id|name"` from the
+ * cascading select — we store the full `"id|name"` pair so the UI can
+ * show the name (preview) and recover the ID (edit mode).
  */
 function parseAddressFormData(formData: FormData) {
   return addressSchema.safeParse({
@@ -64,9 +65,10 @@ function parseAddressFormData(formData: FormData) {
     recipientName: formData.get('recipientName'),
     phone: formData.get('phone'),
     street: formData.get('street'),
-    district: formData.get('district') || null,
-    city: formData.get('city'),
-    province: formData.get('province'),
+    district: formData.get('district')?.toString() || null,
+    village: formData.get('village')?.toString() || null,
+    city: formData.get('city')?.toString() || '',
+    province: formData.get('province')?.toString() || '',
     postalCode: formData.get('postalCode') || null,
     country: formData.get('country') || 'Indonesia',
     latitude: formData.get('latitude') ? Number(formData.get('latitude')) : null,

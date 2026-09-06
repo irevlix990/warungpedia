@@ -132,6 +132,7 @@ export function AddressForm({ t, editAddress, onSubmitted }: AddressFormProps) {
           province: editAddress?.province ?? '',
           city: editAddress?.city ?? '',
           district: editAddress?.district ?? '',
+          village: editAddress?.village ?? '',
         }}
         labels={{
           province: t.province,

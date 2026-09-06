@@ -8,6 +8,18 @@ import { resolveProvinceName, resolveCityName } from '@/data/indonesia'
 import type { Address } from '@/types/address'
 import type { DictionaryAccount } from '../auth/action-strings'
 
+/**
+ * Extract the display name from a stored value.
+ * Handles both `"id|name"` (new format) and raw IDs (legacy data).
+ */
+function displayName(raw: string | null, kind: 'province' | 'city'): string {
+  if (!raw) return ''
+  const idx = raw.indexOf('|')
+  if (idx !== -1) return raw.slice(idx + 1)
+  // Legacy: raw ID — resolve via bundled data
+  return kind === 'province' ? resolveProvinceName(raw) : resolveCityName(raw)
+}
+
 interface AddressListProps {
   t: DictionaryAccount
   addresses: Address[]
@@ -19,8 +31,11 @@ export function AddressList({ t, addresses, onEdit }: AddressListProps) {
   return (
     <ul className="flex flex-col gap-3">
       {addresses.map((address) => {
-        const provinceName = resolveProvinceName(address.province)
-        const cityName = resolveCityName(address.city)
+        const provinceName = displayName(address.province, 'province')
+        const cityName = displayName(address.city, 'city')
+        const districtName = displayName(address.district, 'city')
+        const villageName = displayName(address.village, 'city')
+
         return (
           <li
             key={address.id}
@@ -39,8 +54,9 @@ export function AddressList({ t, addresses, onEdit }: AddressListProps) {
                 </p>
                 <p className="text-sm text-neutral-500">
                   {address.street}
-                  {address.district ? `, ${address.district}` : ''}, {cityName},{' '}
-                  {provinceName}
+                  {districtName ? `, ${districtName}` : ''}
+                  {villageName ? `, ${villageName}` : ''}
+                  {`, ${cityName}, ${provinceName}`}
                   {address.postalCode ? ` ${address.postalCode}` : ''}
                 </p>
                 {address.country && (

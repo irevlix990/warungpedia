@@ -30,6 +30,12 @@ export const addressSchema = z.object({
     .trim()
     .optional()
     .nullable(),
+  village: z
+    .string()
+    .max(100, { message: 'Kelurahan maksimal 100 karakter.' })
+    .trim()
+    .optional()
+    .nullable(),
   city: z
     .string()
     .min(2, { message: 'Kota wajib diisi.' })

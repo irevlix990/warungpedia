@@ -17,6 +17,7 @@ export default async function AddressesPage() {
     phone: row.phone,
     street: row.street,
     district: row.district,
+    village: row.village,
     city: row.city,
     province: row.province,
     postalCode: row.postal_code,

@@ -10,6 +10,7 @@ export interface Address {
   phone: string
   street: string
   district: string | null
+  village: string | null
   city: string
   province: string
   postalCode: string | null
