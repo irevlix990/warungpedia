@@ -25,6 +25,8 @@ export const storeSchema = z.object({
   phone: z.string().trim().max(20),
   province: z.string().trim().min(2, 'Provinsi wajib diisi').max(100),
   city: z.string().trim().min(2, 'Kota / Kabupaten wajib diisi').max(100),
+  district: z.string().trim().max(100).optional().default(''),
+  village: z.string().trim().max(100).optional().default(''),
   logoUrl: urlOrEmpty,
   bannerUrl: urlOrEmpty,
 })

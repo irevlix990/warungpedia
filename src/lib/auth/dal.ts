@@ -25,6 +25,10 @@ export interface AuthUser {
   avatarUrl: string | null
   role: Role
   emailVerified: boolean | null
+  phone: string | null
+  preferredLocale: 'id' | 'en'
+  themePreference: 'light' | 'dark' | 'system'
+  notificationPrefs: Record<string, boolean>
 }
 
 /**
@@ -41,7 +45,7 @@ export const getCurrentUser = cache(async (): Promise<AuthUser | null> => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, avatar_url, role, email_verified')
+    .select('full_name, avatar_url, role, email_verified, phone, preferred_locale, theme_preference, notification_prefs')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -56,6 +60,10 @@ export const getCurrentUser = cache(async (): Promise<AuthUser | null> => {
         : null),
     role: (profile?.role as Role) ?? 'BUYER',
     emailVerified: profile?.email_verified ?? null,
+    phone: profile?.phone ?? null,
+    preferredLocale: (profile?.preferred_locale as 'id' | 'en') ?? 'id',
+    themePreference: (profile?.theme_preference as 'light' | 'dark' | 'system') ?? 'system',
+    notificationPrefs: (profile?.notification_prefs as Record<string, boolean>) ?? {},
   }
 })
 

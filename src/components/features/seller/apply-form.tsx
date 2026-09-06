@@ -4,13 +4,16 @@ import { useActionState } from 'react'
 import { applyStoreAction } from '@/app/actions/store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { CascadingAddressSelect } from '@/components/ui/cascading-address-select'
 import type { DictionarySeller } from '../auth/action-strings'
 
 interface ApplyFormProps {
   t: DictionarySeller
+  userId: string
 }
 
-export function ApplyForm({ t }: ApplyFormProps) {
+export function ApplyForm({ t, userId }: ApplyFormProps) {
   const [state, action, pending] = useActionState(applyStoreAction, undefined)
 
   return (
@@ -133,73 +136,39 @@ export function ApplyForm({ t }: ApplyFormProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="province"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.province}
-        </label>
-        <Input
-          id="province"
-          name="province"
-          required
-          error={Boolean(state?.errors?.province)}
-        />
-        {state?.errors?.province && (
-          <p className="text-xs text-danger-600">
-            {state.errors.province[0]}
-          </p>
-        )}
-      </div>
+      <CascadingAddressSelect
+        names={{
+          province: 'province',
+          city: 'city',
+          district: 'district',
+          village: 'village',
+        }}
+        labels={{
+          province: t.province,
+          city: t.city,
+          district: t.district,
+          village: t.village,
+        }}
+        className="sm:col-span-2"
+      />
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="city"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.city}
-        </label>
-        <Input
-          id="city"
-          name="city"
-          required
-          error={Boolean(state?.errors?.city)}
-        />
-        {state?.errors?.city && (
-          <p className="text-xs text-danger-600">{state.errors.city[0]}</p>
-        )}
-      </div>
+      <ImageUpload
+        name="logoUrl"
+        bucket="stores"
+        prefix={userId}
+        label={t.logoUrl}
+        aspect="square"
+        className="sm:col-span-1"
+      />
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="logoUrl"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.logoUrl}
-        </label>
-        <Input id="logoUrl" name="logoUrl" />
-        {state?.errors?.logoUrl && (
-          <p className="text-xs text-danger-600">
-            {state.errors.logoUrl[0]}
-          </p>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="bannerUrl"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.bannerUrl}
-        </label>
-        <Input id="bannerUrl" name="bannerUrl" />
-        {state?.errors?.bannerUrl && (
-          <p className="text-xs text-danger-600">
-            {state.errors.bannerUrl[0]}
-          </p>
-        )}
-      </div>
+      <ImageUpload
+        name="bannerUrl"
+        bucket="stores"
+        prefix={userId}
+        label={t.bannerUrl}
+        aspect="wide"
+        className="sm:col-span-1"
+      />
 
       {state?.message && (
         <p

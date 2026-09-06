@@ -8,6 +8,7 @@ import {
 } from '@/app/actions/product'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { MultiImageUpload } from '@/components/ui/multi-image-upload'
 import type { Product } from '@/types/product'
 import type { Category } from '@/types/catalog'
 import type { DictionaryProduct } from '../auth/action-strings'
@@ -16,12 +17,14 @@ interface ProductFormProps {
   t: DictionaryProduct
   categories: Category[]
   product?: Product
+  storeId: string
 }
 
 export function ProductForm({
   t,
   categories,
   product,
+  storeId,
 }: ProductFormProps) {
   const action = product ? updateProductAction : createProductAction
   const [state, formAction, pending] = useActionState<
@@ -250,16 +253,13 @@ export function ProductForm({
       </div>
 
       <div className="flex flex-col gap-1.5 sm:col-span-2">
-        <label
-          htmlFor="imageUrls"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.images}
-        </label>
-        <Input
-          id="imageUrls"
+        <MultiImageUpload
           name="imageUrls"
-          defaultValue={product?.imageUrls.join(', ')}
+          bucket="products"
+          prefix={storeId}
+          value={product?.imageUrls ?? []}
+          max={8}
+          label={t.images}
         />
       </div>
 

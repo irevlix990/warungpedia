@@ -18,10 +18,15 @@ export default async function ProfilePage() {
         <CardContent>
           <ProfileForm
             t={t.account}
+            userId={user.id}
             defaultValues={{
               fullName: user.fullName,
               email: user.email ?? '',
               avatarUrl: user.avatarUrl,
+              phone: user.phone,
+              preferredLocale: user.preferredLocale,
+              themePreference: user.themePreference,
+              notificationPrefs: user.notificationPrefs,
             }}
           />
         </CardContent>

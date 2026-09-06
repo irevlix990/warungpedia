@@ -4,6 +4,8 @@ import { useActionState } from 'react'
 import { updateStoreAction } from '@/app/actions/store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { CascadingAddressSelect } from '@/components/ui/cascading-address-select'
 import type { Store } from '@/types/store'
 import type { DictionarySeller } from '../auth/action-strings'
 
@@ -125,45 +127,47 @@ export function StoreSettingsForm({ store, t }: StoreSettingsFormProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="province"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.province}
-        </label>
-        <Input
-          id="province"
-          name="province"
-          required
-          defaultValue={store.province ?? ''}
-          error={Boolean(state?.errors?.province)}
-        />
-        {state?.errors?.province && (
-          <p className="text-xs text-danger-600">
-            {state.errors.province[0]}
-          </p>
-        )}
-      </div>
+      <CascadingAddressSelect
+        names={{
+          province: 'province',
+          city: 'city',
+          district: 'district',
+          village: 'village',
+        }}
+        labels={{
+          province: t.province,
+          city: t.city,
+          district: t.district,
+          village: t.village,
+        }}
+        value={{
+          province: store.province ?? '',
+          city: store.city ?? '',
+          district: store.district ?? '',
+          village: store.village ?? '',
+        }}
+        className="sm:col-span-2"
+      />
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="city"
-          className="text-sm font-medium text-neutral-700 dark:text-neutral-200"
-        >
-          {t.city}
-        </label>
-        <Input
-          id="city"
-          name="city"
-          required
-          defaultValue={store.city ?? ''}
-          error={Boolean(state?.errors?.city)}
-        />
-        {state?.errors?.city && (
-          <p className="text-xs text-danger-600">{state.errors.city[0]}</p>
-        )}
-      </div>
+      <ImageUpload
+        name="logoUrl"
+        bucket="stores"
+        prefix={store.ownerId}
+        value={store.logoUrl ?? ''}
+        label={t.logoUrl}
+        aspect="square"
+        className="sm:col-span-1"
+      />
+
+      <ImageUpload
+        name="bannerUrl"
+        bucket="stores"
+        prefix={store.ownerId}
+        value={store.bannerUrl ?? ''}
+        label={t.bannerUrl}
+        aspect="wide"
+        className="sm:col-span-1"
+      />
 
       {state?.message && (
         <p

@@ -14,5 +14,7 @@ export interface Address {
   province: string
   postalCode: string | null
   country: string
+  latitude: number | null
+  longitude: number | null
   isDefault: boolean
 }

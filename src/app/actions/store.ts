@@ -48,6 +48,8 @@ export async function applyStoreAction(
     phone: formData.get('phone') || '',
     province: formData.get('province'),
     city: formData.get('city'),
+    district: formData.get('district') || '',
+    village: formData.get('village') || '',
     logoUrl: formData.get('logoUrl') || '',
     bannerUrl: formData.get('bannerUrl') || '',
   })
@@ -85,6 +87,8 @@ export async function updateStoreAction(
     phone: formData.get('phone') || '',
     province: formData.get('province'),
     city: formData.get('city'),
+    district: formData.get('district') || '',
+    village: formData.get('village') || '',
     logoUrl: formData.get('logoUrl') || '',
     bannerUrl: formData.get('bannerUrl') || '',
   })

@@ -69,7 +69,15 @@ export const updateProfileSchema = z.object({
     .trim()
     .optional()
     .nullable(),
+  avatarUrl: z
+    .string()
+    .max(500, { message: 'URL avatar maksimal 500 karakter.' })
+    .trim()
+    .optional()
+    .nullable(),
   preferredLocale: z.enum(['id', 'en']).default('id'),
+  themePreference: z.enum(['light', 'dark', 'system']).default('system'),
+  notificationPrefs: z.record(z.string(), z.boolean()).optional().default({}),
 })
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>

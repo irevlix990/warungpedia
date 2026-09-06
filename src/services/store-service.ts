@@ -24,6 +24,8 @@ function mapStore(row: StoreRow): Store {
     phone: row.phone,
     province: row.province,
     city: row.city,
+    district: row.district,
+    village: row.village,
     status: row.status,
     rejectionReason: row.rejection_reason,
     approvedAt: row.approved_at,
@@ -132,6 +134,8 @@ export async function createStoreApplication(
     p_phone: (input.phone ?? '').trim(),
     p_province: input.province.trim(),
     p_city: input.city.trim(),
+    p_district: (input.district ?? '').trim(),
+    p_village: (input.village ?? '').trim(),
     p_logo_url: (input.logoUrl ?? '').trim(),
     p_banner_url: (input.bannerUrl ?? '').trim(),
   })
@@ -164,6 +168,8 @@ export async function updateStoreDetails(
     p_phone: (input.phone ?? '').trim(),
     p_province: input.province.trim(),
     p_city: input.city.trim(),
+    p_district: (input.district ?? '').trim(),
+    p_village: (input.village ?? '').trim(),
     p_logo_url: (input.logoUrl ?? '').trim(),
     p_banner_url: (input.bannerUrl ?? '').trim(),
   })

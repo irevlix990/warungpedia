@@ -17,7 +17,10 @@ export async function updateProfile(userId: string, input: UpdateProfileInput) {
     .update({
       full_name: input.fullName,
       phone: input.phone ?? null,
+      avatar_url: input.avatarUrl ?? null,
       preferred_locale: input.preferredLocale,
+      theme_preference: input.themePreference,
+      notification_prefs: input.notificationPrefs,
     })
     .eq('id', userId)
   if (error) throw new ValidationError(error.message)
@@ -48,6 +51,8 @@ export async function createAddress(userId: string, input: AddressInput) {
     province: input.province,
     postal_code: input.postalCode ?? null,
     country: input.country,
+    latitude: input.latitude ?? null,
+    longitude: input.longitude ?? null,
     is_default: input.isDefault,
   })
   if (error) throw new ValidationError(error.message)
@@ -71,6 +76,8 @@ export async function updateAddress(
       province: input.province,
       postal_code: input.postalCode ?? null,
       country: input.country,
+      latitude: input.latitude ?? null,
+      longitude: input.longitude ?? null,
       is_default: input.isDefault,
     })
     .eq('id', addressId)

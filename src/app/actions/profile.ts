@@ -29,7 +29,14 @@ export async function updateProfileAction(
   const parsed = updateProfileSchema.safeParse({
     fullName: formData.get('fullName'),
     phone: formData.get('phone') || null,
+    avatarUrl: formData.get('avatarUrl') || null,
     preferredLocale: formData.get('preferredLocale') || 'id',
+    themePreference: formData.get('themePreference') || 'system',
+    notificationPrefs: {
+      orderUpdates: formData.get('notifOrderUpdates') === 'on',
+      promotions: formData.get('notifPromotions') === 'on',
+      chat: formData.get('notifChat') === 'on',
+    },
   })
 
   if (!parsed.success) {
@@ -44,6 +51,28 @@ export async function updateProfileAction(
 
   revalidatePath('/account/profile')
   return { success: true, message: 'Profil berhasil diperbarui.' }
+}
+
+/**
+ * Parse latitude / longitude from FormData along with address fields.
+ * Province, city, district, village are stored as IDs from the cascading
+ * select and resolved to display names in the UI layer.
+ */
+function parseAddressFormData(formData: FormData) {
+  return addressSchema.safeParse({
+    label: formData.get('label') || 'Alamat',
+    recipientName: formData.get('recipientName'),
+    phone: formData.get('phone'),
+    street: formData.get('street'),
+    district: formData.get('district') || null,
+    city: formData.get('city'),
+    province: formData.get('province'),
+    postalCode: formData.get('postalCode') || null,
+    country: formData.get('country') || 'Indonesia',
+    latitude: formData.get('latitude') ? Number(formData.get('latitude')) : null,
+    longitude: formData.get('longitude') ? Number(formData.get('longitude')) : null,
+    isDefault: formData.get('isDefault') === 'on',
+  })
 }
 
 export async function updatePasswordAction(
@@ -76,18 +105,7 @@ export async function addAddressAction(
 ): Promise<ProfileFormState> {
   const user = await requireUserOrThrow()
 
-  const parsed = addressSchema.safeParse({
-    label: formData.get('label') || 'Alamat',
-    recipientName: formData.get('recipientName'),
-    phone: formData.get('phone'),
-    street: formData.get('street'),
-    district: formData.get('district') || null,
-    city: formData.get('city'),
-    province: formData.get('province'),
-    postalCode: formData.get('postalCode') || null,
-    country: formData.get('country') || 'Indonesia',
-    isDefault: formData.get('isDefault') === 'on',
-  })
+  const parsed = parseAddressFormData(formData)
 
   if (!parsed.success) {
     return { errors: parsed.error.flatten().fieldErrors }
@@ -110,18 +128,7 @@ export async function editAddressAction(
   const user = await requireUserOrThrow()
   const addressId = formData.get('addressId')?.toString()
 
-  const parsed = addressSchema.safeParse({
-    label: formData.get('label') || 'Alamat',
-    recipientName: formData.get('recipientName'),
-    phone: formData.get('phone'),
-    street: formData.get('street'),
-    district: formData.get('district') || null,
-    city: formData.get('city'),
-    province: formData.get('province'),
-    postalCode: formData.get('postalCode') || null,
-    country: formData.get('country') || 'Indonesia',
-    isDefault: formData.get('isDefault') === 'on',
-  })
+  const parsed = parseAddressFormData(formData)
 
   if (!parsed.success) {
     return { errors: parsed.error.flatten().fieldErrors }

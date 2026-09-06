@@ -10,6 +10,8 @@ const base = {
   phone: '081234567890',
   province: 'DKI Jakarta',
   city: 'Jakarta Selatan',
+  district: 'Kecamatan Tebet',
+  village: 'Kelurahan Tebet Timur',
   logoUrl: '',
   bannerUrl: '',
 }

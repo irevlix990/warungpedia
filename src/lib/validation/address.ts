@@ -50,6 +50,18 @@ export const addressSchema = z.object({
     .max(100, { message: 'Negara maksimal 100 karakter.' })
     .trim()
     .default('Indonesia'),
+  latitude: z
+    .number()
+    .min(-90, { message: 'Latitude tidak valid.' })
+    .max(90, { message: 'Latitude tidak valid.' })
+    .optional()
+    .nullable(),
+  longitude: z
+    .number()
+    .min(-180, { message: 'Longitude tidak valid.' })
+    .max(180, { message: 'Longitude tidak valid.' })
+    .optional()
+    .nullable(),
   isDefault: z.boolean().default(false),
 })
 

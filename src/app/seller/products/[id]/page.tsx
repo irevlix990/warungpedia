@@ -39,7 +39,12 @@ export default async function EditProductPage({
           {t.product.edit}: {product.name}
         </h2>
       </div>
-      <ProductForm t={t.product} categories={categories} product={product} />
+      <ProductForm
+        t={t.product}
+        categories={categories}
+        product={product}
+        storeId={store.id}
+      />
     </section>
   )
 }

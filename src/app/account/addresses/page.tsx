@@ -2,8 +2,7 @@ import { requireUser } from '@/lib/auth/dal'
 import { getDictionary } from '@/lib/i18n'
 import { getAddresses } from '@/services/profile-service'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { AddressList } from '@/components/features/account/address-list'
-import { AddressForm } from '@/components/features/account/address-form'
+import { AddressManager } from '@/components/features/account/address-manager'
 import type { Address } from '@/types/address'
 
 export default async function AddressesPage() {
@@ -22,6 +21,8 @@ export default async function AddressesPage() {
     province: row.province,
     postalCode: row.postal_code,
     country: row.country,
+    latitude: row.latitude,
+    longitude: row.longitude,
     isDefault: row.is_default,
   }))
 
@@ -32,21 +33,8 @@ export default async function AddressesPage() {
           <CardTitle>{t.account.addressesTitle}</CardTitle>
           <CardDescription>{t.account.addressesSubtitle}</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {addresses.length === 0 ? (
-            <p className="text-sm text-neutral-500">{t.account.noAddresses}</p>
-          ) : (
-            <AddressList t={t.account} addresses={addresses} />
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t.account.addAddress}</CardTitle>
-        </CardHeader>
         <CardContent>
-          <AddressForm t={t.account} />
+          <AddressManager t={t.account} addresses={addresses} />
         </CardContent>
       </Card>
     </div>

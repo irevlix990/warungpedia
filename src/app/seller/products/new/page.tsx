@@ -23,7 +23,7 @@ export default async function NewProductPage() {
           {t.product.addProduct}
         </h2>
       </div>
-      <ProductForm t={t.product} categories={categories} />
+      <ProductForm t={t.product} categories={categories} storeId={store.id} />
     </section>
   )
 }

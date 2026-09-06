@@ -219,6 +219,8 @@ export type Database = {
           phone: string | null
           province: string | null
           city: string | null
+          district: string | null
+          village: string | null
           status: 'PENDING' | 'ACTIVE' | 'REJECTED' | 'SUSPENDED' | 'CLOSED'
           rejection_reason: string | null
           approved_at: string | null
@@ -240,6 +242,8 @@ export type Database = {
           phone?: string | null
           province?: string | null
           city?: string | null
+          district?: string | null
+          village?: string | null
           status?: 'PENDING' | 'ACTIVE' | 'REJECTED' | 'SUSPENDED' | 'CLOSED'
           rejection_reason?: string | null
           approved_at?: string | null
@@ -261,6 +265,8 @@ export type Database = {
           phone?: string | null
           province?: string | null
           city?: string | null
+          district?: string | null
+          village?: string | null
           status?: 'PENDING' | 'ACTIVE' | 'REJECTED' | 'SUSPENDED' | 'CLOSED'
           rejection_reason?: string | null
           approved_at?: string | null
@@ -1698,12 +1704,14 @@ export type Database = {
           p_city: string
           p_contact_email: string
           p_description: string
+          p_district: string
           p_logo_url: string
           p_name: string
           p_phone: string
           p_province: string
           p_slug: string
           p_tagline: string
+          p_village: string
         }
         Returns: string
       }
@@ -1955,12 +1963,14 @@ export type Database = {
           p_city: string
           p_contact_email: string
           p_description: string
+          p_district: string
           p_logo_url: string
           p_name: string
           p_phone: string
           p_province: string
           p_store_id: string
           p_tagline: string
+          p_village: string
         }
         Returns: undefined
       }

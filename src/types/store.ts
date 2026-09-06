@@ -22,6 +22,8 @@ export interface Store {
   phone: string | null
   province: string | null
   city: string | null
+  district: string | null
+  village: string | null
   status: StoreStatus
   rejectionReason: string | null
   approvedAt: string | null
@@ -41,6 +43,8 @@ export interface StoreInput {
   phone?: string
   province: string
   city: string
+  district?: string
+  village?: string
   logoUrl?: string | null
   bannerUrl?: string | null
 }

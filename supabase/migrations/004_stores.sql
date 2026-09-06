@@ -24,6 +24,8 @@ create table if not exists public.stores (
   phone           text,
   province        text,
   city            text,
+  district        text,
+  village         text,
   status          text not null default 'PENDING'
                     check (status in ('PENDING','ACTIVE','REJECTED','SUSPENDED','CLOSED')),
   rejection_reason text,

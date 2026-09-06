@@ -29,7 +29,7 @@ export default async function SellerApplyPage() {
         </p>
       </div>
 
-      <ApplyForm t={t.seller} />
+      <ApplyForm t={t.seller} userId={user.id} />
     </section>
   )
 }
