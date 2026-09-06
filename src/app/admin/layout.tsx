@@ -46,7 +46,10 @@ export default async function AdminLayout({
     },
     {
       title: t.admin.groups.users,
-      links: [{ href: '/admin/users', label: t.admin.users }],
+      links: [
+        { href: '/admin/users', label: t.admin.users },
+        { href: '/admin/support', label: 'Live Chat Support' },
+      ],
     },
     {
       title: t.analytics.title,

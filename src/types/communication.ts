@@ -47,3 +47,21 @@ export interface Message {
   isRead: boolean
   createdAt: string
 }
+
+/** User → Admin support conversation (one per user). */
+export interface SupportConversation {
+  id: string
+  userId: string
+  adminId: string | null
+  lastMessageAt: string | null
+  createdAt: string
+}
+
+/** Message within a support conversation. */
+export interface SupportMessage {
+  id: string
+  senderId: string
+  body: string
+  isRead: boolean
+  createdAt: string
+}

@@ -1092,6 +1092,57 @@ export type Database = {
           },
         ]
       }
+      support_conversations: {
+        Row: {
+          id: string
+          user_id: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      support_messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          sender_id: string
+          body: string
+          is_read: boolean
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          sender_id: string
+          body: string
+          is_read?: boolean
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          sender_id?: string
+          body?: string
+          is_read?: boolean
+          read_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           id: string
@@ -2049,6 +2100,52 @@ export type Database = {
         Returns: string
       }
       mark_conversation_read: {
+        Args: { p_conversation_id: string }
+        Returns: undefined
+      }
+      get_or_create_support_conversation: {
+        Args: Record<string, never>
+        Returns: string
+      }
+      send_support_message: {
+        Args: { p_body: string }
+        Returns: string
+      }
+      mark_support_conversation_read: {
+        Args: { p_conversation_id?: string }
+        Returns: undefined
+      }
+      admin_get_support_conversations: {
+        Args: Record<string, never>
+        Returns: {
+          id: string
+          user_id: string
+          user_name: string | null
+          user_email: string | null
+          user_avatar_url: string | null
+          last_message: string | null
+          last_message_at: string | null
+          unread_count: number
+          created_at: string
+        }[]
+      }
+      admin_get_support_messages: {
+        Args: { p_conversation_id: string }
+        Returns: {
+          id: string
+          sender_id: string
+          sender_name: string | null
+          sender_email: string | null
+          body: string
+          is_read: boolean
+          created_at: string
+        }[]
+      }
+      admin_send_support_message: {
+        Args: { p_conversation_id: string; p_body: string }
+        Returns: string
+      }
+      admin_mark_conversation_read: {
         Args: { p_conversation_id: string }
         Returns: undefined
       }

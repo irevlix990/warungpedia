@@ -15,6 +15,7 @@ import type {
   Notification,
   NotificationPrefs,
   NotificationType,
+  SupportMessage,
 } from '@/types/communication'
 
 type NotificationRow =
@@ -185,6 +186,119 @@ export const getConversations = cache(
     return result
   }
 )
+
+// ──────────────────────────────────────────────────────────────────────
+// SUPPORT CHAT (User → Admin)
+// ──────────────────────────────────────────────────────────────────────
+
+/** Open or return the user's support conversation. */
+export async function getSupportConversation(): Promise<string> {
+  const supabase = await createClient()
+  const { data: id, error } = await supabase.rpc('get_or_create_support_conversation')
+  if (error) {
+    throw new Error('Gagal membuka chat dukungan.')
+  }
+  if (!id) throw new Error('Gagal membuka chat dukungan.')
+  return id
+}
+
+/** Get messages in the user's support conversation. */
+export async function getSupportMessages(): Promise<SupportMessage[]> {
+  const supabase = await createClient()
+  const userId = (await supabase.auth.getUser()).data.user?.id ?? ''
+  
+  // Get conversation
+  const { data: conv, error } = await supabase
+    .from('support_conversations')
+    .select('*')
+    .eq('user_id', userId)
+    .maybeSingle()
+  
+  if (error || !conv) return []
+
+  // Get messages
+  const { data: messages, error: msgErr } = await supabase
+    .from('support_messages')
+    .select('*')
+    .eq('conversation_id', conv.id)
+    .order('created_at', { ascending: true })
+    .limit(100)
+  
+  if (msgErr) {
+    throw new Error('Gagal memuat pesan chat.')
+  }
+
+  // Mark as read
+  try {
+    await supabase.rpc('mark_support_conversation_read')
+  } catch {
+    // Best-effort
+  }
+
+  return (messages ?? []).map((m): SupportMessage => ({
+    id: m.id,
+    senderId: m.sender_id,
+    body: m.body,
+    isRead: m.is_read,
+    createdAt: m.created_at,
+  }))
+}
+
+/** Send a message in the user's support conversation. */
+export async function sendSupportMessage(body: string): Promise<string> {
+  const supabase = await createClient()
+  const { data: id, error } = await supabase.rpc('send_support_message', {
+    p_body: body,
+  })
+  if (error) {
+    throw new Error('Gagal mengirim pesan.')
+  }
+  if (!id) throw new Error('Gagal mengirim pesan.')
+  return id
+}
+
+/** Admin: get all user support conversations */
+export async function getAdminSupportConversations() {
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('admin_get_support_conversations')
+  if (error) {
+    return []
+  }
+  return data ?? []
+}
+
+/** Admin: get messages for a specific conversation */
+export async function getAdminSupportMessages(conversationId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('admin_get_support_messages', {
+    p_conversation_id: conversationId,
+  })
+  if (error) {
+    return []
+  }
+  return data ?? []
+}
+
+/** Admin: send support reply */
+export async function sendAdminSupportReply(conversationId: string, body: string) {
+  const supabase = await createClient()
+  const { data: id, error } = await supabase.rpc('admin_send_support_message', {
+    p_conversation_id: conversationId,
+    p_body: body,
+  })
+  if (error) {
+    throw new Error('Gagal membalas pesan.')
+  }
+  return id
+}
+
+/** Admin: mark conversation read */
+export async function markAdminSupportConversationRead(conversationId: string) {
+  const supabase = await createClient()
+  await supabase.rpc('admin_mark_conversation_read', {
+    p_conversation_id: conversationId,
+  })
+}
 
 async function unreadForConversation(
   conversationId: string,
