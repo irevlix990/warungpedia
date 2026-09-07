@@ -4,6 +4,7 @@ import { Logo } from './logo'
 import { SearchForm } from './search-form'
 import { UserMenu } from './user-menu'
 import { NotificationBell } from './notification-bell'
+import { ThemeToggle } from './theme-toggle'
 
 const navLinkClass =
   'relative rounded-xl px-3.5 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-neutral-50'
@@ -32,6 +33,7 @@ export function Header() {
           </div>
 
           <div className="ml-auto flex items-center gap-1 md:ml-0">
+            <ThemeToggle />
             <NotificationBell />
             <UserMenu />
           </div>
