@@ -4396,10 +4396,10 @@ begin
     pr.id,
     pr.name,
     pr.slug,
-    count(distinct pv.id)                                     as views,
-    count(distinct o.id)                                      as orders_count,
-    coalesce(sum(oi.quantity), 0)                             as units_sold,
-    coalesce(sum(se.net), 0)                                  as revenue_net
+    count(distinct pv.id)                                                  as views,
+    count(distinct o.id)                                                   as orders_count,
+    coalesce(sum(case when o.id is not null then oi.quantity else 0 end), 0) as units_sold,
+    coalesce(sum(case when se.id is not null then se.net else 0 end), 0)     as revenue_net
   from public.products pr
   left join public.product_views pv
     on pv.product_id = pr.id
