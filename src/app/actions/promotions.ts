@@ -25,10 +25,15 @@ export interface PromoActionState {
   discount?: number
 }
 
-/** Converts a `datetime-local` value (naive) to UTC ISO, or null when empty. */
+/** Converts a datetime value to a valid ISO string, or null when empty.
+ *  If the value already carries an offset (e.g. from DateTimePicker),
+ *  return it as-is; otherwise treat it as naive UTC and append "Z". */
 function toUtcIso(value: FormDataEntryValue | null): string | null {
   const raw = typeof value === 'string' ? value.trim() : ''
   if (!raw) return null
+  // Already has an offset like +07:00 or Z → valid ISO, return as-is
+  if (/[Zz]$/.test(raw) || /[+-]\d{2}:\d{2}$/.test(raw)) return raw
+  // Naive datetime-local value → treat as UTC
   return `${raw}Z`
 }
 

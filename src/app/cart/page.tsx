@@ -56,7 +56,7 @@ export default async function CartPage() {
             </div>
           </div>
           <aside>
-            <CartSummary totals={totals} hasItems t={t.cart} />
+            <CartSummary totals={totals} hasItems t={t.cart} promo={t.promotions} />
           </aside>
         </div>
       )}

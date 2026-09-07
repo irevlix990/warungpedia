@@ -3,16 +3,19 @@
 import { checkoutAction } from '@/app/actions/cart'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { VoucherField } from './voucher-field'
 import type { CartTotals } from '@/types/cart'
 import type { DictionaryCart } from '../auth/action-strings'
+import type { DictionaryPromotions } from '../auth/action-strings'
 
 interface CartSummaryProps {
   totals: CartTotals
   hasItems: boolean
   t: DictionaryCart
+  promo?: DictionaryPromotions
 }
 
-export function CartSummary({ totals, hasItems, t }: CartSummaryProps) {
+export function CartSummary({ totals, hasItems, t, promo }: CartSummaryProps) {
   return (
     <div className="rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
       <h2 className="font-display text-lg font-bold text-neutral-900 dark:text-neutral-50">
@@ -34,7 +37,10 @@ export function CartSummary({ totals, hasItems, t }: CartSummaryProps) {
       </dl>
       {hasItems && (
         <form action={checkoutAction} className="mt-5">
-          <Button type="submit" size="lg" className="w-full">
+          {promo ? (
+            <VoucherField subtotal={totals.subtotal} t={promo} />
+          ) : null}
+          <Button type="submit" size="lg" className="w-full mt-4">
             {t.checkout}
           </Button>
         </form>

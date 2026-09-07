@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { DateTimePicker } from '@/components/ui/date-time-picker'
 import type { Voucher } from '@/types/promotions'
 import type { DictionaryPromotions } from '../auth/action-strings'
 
@@ -177,12 +178,15 @@ export function VoucherForm({ t, voucher }: VoucherFormProps) {
         >
           {t.startsAt}
         </label>
-        <Input
-          id="startsAt"
+        <DateTimePicker
           name="startsAt"
-          type="datetime-local"
-          defaultValue={voucher?.startsAt?.slice(0, 16) ?? ''}
+          label={t.startsAt}
+          defaultValue={voucher?.startsAt ?? ''}
+          error={error('startsAt')}
         />
+        {error('startsAt') && (
+          <p className="text-xs text-danger-600">{error('startsAt')}</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -192,12 +196,15 @@ export function VoucherForm({ t, voucher }: VoucherFormProps) {
         >
           {t.expiresAt}
         </label>
-        <Input
-          id="expiresAt"
+        <DateTimePicker
           name="expiresAt"
-          type="datetime-local"
-          defaultValue={voucher?.expiresAt?.slice(0, 16) ?? ''}
+          label={t.expiresAt}
+          defaultValue={voucher?.expiresAt ?? ''}
+          error={error('expiresAt')}
         />
+        {error('expiresAt') && (
+          <p className="text-xs text-danger-600">{error('expiresAt')}</p>
+        )}
       </div>
 
       <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 sm:col-span-2">
