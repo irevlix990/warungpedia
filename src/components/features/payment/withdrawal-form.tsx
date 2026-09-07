@@ -7,6 +7,8 @@ import {
 } from '@/app/actions/payment'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { INDONESIAN_BANKS } from '@/config/banks'
 import type { DictionaryFinance } from '../auth/action-strings'
 
 interface WithdrawalFormProps {
@@ -56,12 +58,22 @@ export function WithdrawalForm({ balance, t }: WithdrawalFormProps) {
         >
           {t.bankName}
         </label>
-        <Input
+        <Select
           id="bankName"
           name="bankName"
           required
           error={Boolean(error('bankName'))}
-        />
+          defaultValue=""
+        >
+          <option value="" disabled>
+            {t.selectBank ?? 'Pilih bank...'}
+          </option>
+          {INDONESIAN_BANKS.map((bank) => (
+            <option key={bank} value={bank}>
+              {bank}
+            </option>
+          ))}
+        </Select>
         {error('bankName') && (
           <p className="text-xs text-danger-600">{error('bankName')}</p>
         )}

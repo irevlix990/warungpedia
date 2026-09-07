@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getDictionary } from '@/lib/i18n'
 import { getCurrentUser } from '@/lib/auth/dal'
 import { getSellerOrder } from '@/services/shipping-service'
+import { ProcessOrderButton } from '@/components/features/shipping/process-order-button'
 import { ShipOrderForm } from '@/components/features/shipping/ship-order-form'
 import { Card, Badge } from '@/components/ui'
 import { formatIDR } from '@/utils/cn'
@@ -27,6 +28,7 @@ export default async function SellerOrderPage({
   const order = await getSellerOrder(id)
   if (!order) notFound()
 
+  const canProcess = order.status === 'PAID'
   const canShip = order.status === 'PAID' || order.status === 'PROCESSING'
 
   return (
@@ -41,6 +43,16 @@ export default async function SellerOrderPage({
           </div>
           <Badge variant="brand">{order.status}</Badge>
         </div>
+
+        {canProcess && (
+          <ProcessOrderButton
+            orderId={order.id}
+            t={{
+              processOrder: t.shipping.processOrder,
+              processOrderHint: t.shipping.processOrderHint,
+            }}
+          />
+        )}
 
         {canShip && <ShipOrderForm orderId={order.id} t={t.shipping} />}
 

@@ -9,6 +9,7 @@ import type { Role } from '@/config/roles'
 import type { Database } from '@/types/database'
 import type { Category } from '@/types/catalog'
 import type { ProductReview } from '@/types/social'
+import type { ProductStatus } from '@/types/product'
 import type {
   AdminStats,
   AdminUser,
@@ -125,7 +126,7 @@ function mapAdminProduct(
     categoryName: row.categories?.name ?? null,
     price: row.price,
     stock: row.stock,
-    status: row.status,
+    status: row.status as ProductStatus,
     isFeatured: row.is_featured,
     ratingAvg: row.rating_avg,
     reviewsCount: row.reviews_count,
@@ -279,7 +280,7 @@ export async function getAdminReviews(
       rating: row.rating,
       title: row.title,
       body: row.body,
-      status: row.status,
+      status: row.status as 'ACTIVE' | 'HIDDEN',
       createdAt: row.created_at,
       updatedAt: row.updated_at,
       productName,

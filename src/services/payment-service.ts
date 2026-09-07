@@ -2,15 +2,7 @@ import 'server-only'
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/types/database'
-import type {
-  Payment,
-  PaymentMethod,
-  LedgerEntry,
-  SellerEarning,
-  Wallet,
-  Withdrawal,
-  WithdrawalStatus,
-} from '@/types/payment'
+import type { Payment, PaymentMethod, PaymentStatus, LedgerEntry, LedgerType, SellerEarning, EarningStatus, Wallet, Withdrawal, WithdrawalStatus } from '@/types/payment'
 
 type PaymentRow = Database['public']['Tables']['payments']['Row']
 type LedgerRow = Database['public']['Tables']['ledger_entries']['Row']
@@ -22,9 +14,9 @@ function mapPayment(row: PaymentRow): Payment {
     id: row.id,
     orderId: row.order_id,
     userId: row.user_id,
-    method: row.method,
+    method: row.method as PaymentMethod,
     amount: row.amount,
-    status: row.status,
+    status: row.status as PaymentStatus,
     reference: row.reference,
     paidAt: row.paid_at,
     createdAt: row.created_at,
@@ -35,7 +27,7 @@ function mapLedger(row: LedgerRow): LedgerEntry {
   return {
     id: row.id,
     amount: row.amount,
-    type: row.type,
+    type: row.type as LedgerType,
     referenceType: row.reference_type,
     description: row.description,
     createdAt: row.created_at,
@@ -50,22 +42,24 @@ function mapEarning(row: EarningRow): SellerEarning {
     gross: row.gross,
     commission: row.commission,
     net: row.net,
-    status: row.status,
+    status: row.status as EarningStatus,
     createdAt: row.created_at,
   }
 }
 
-function mapWithdrawal(row: WithdrawalRow): Withdrawal {
+function mapWithdrawal(row: WithdrawalRow & { profiles?: { full_name?: string | null } | null }): Withdrawal {
   return {
     id: row.id,
     userId: row.user_id,
+    sellerName: row.profiles?.full_name ?? null,
     amount: row.amount,
-    status: row.status,
+    status: row.status as WithdrawalStatus,
     bankName: row.bank_name,
     bankAccountNumber: row.bank_account_number,
     bankAccountName: row.bank_account_name,
     rejectionReason: row.rejection_reason,
     createdAt: row.created_at,
+    processedAt: row.processed_at,
   }
 }
 
@@ -151,12 +145,14 @@ export const getWithdrawalsForUser = cache(
   }
 )
 
-/** Admin: all withdrawals, optionally filtered by status. */
+/** Admin: all withdrawals with seller info, optionally filtered by status. */
 export async function getWithdrawalsByStatus(
   status?: WithdrawalStatus
 ): Promise<Withdrawal[]> {
   const supabase = await createClient()
-  let q = supabase.from('withdrawals').select('*')
+  let q = supabase
+    .from('withdrawals')
+    .select('*, profiles(full_name)')
   if (status) q = q.eq('status', status)
   const { data, error } = await q.order('created_at', { ascending: true })
   if (error) {
@@ -236,13 +232,17 @@ export async function rejectWithdrawal(
 /** Maps common Postgres/RLS errors to friendly, user-safe messages. */
 function mapFinanceError(code: string | null, message: string): string {
   switch (code) {
-    case 'P0002':
-      return message
-    case '23514':
+    case 'P0001': // raise_exception (custom exceptions)
+    case 'P0002': // no_data_found
+    case '23514': // check_violation
       return message
     case '42501':
       return 'Anda tidak memiliki izin untuk melakukan tindakan ini.'
+    case '23503': // foreign_key_violation
+      return 'Data tidak valid atau referensi hilang.'
+    case '22003': // integer_out_of_range
+      return 'Nilai transaksi terlalu besar. Mohon hubungi dukungan.'
     default:
-      return 'Gagal memproses keuangan.'
+      return message || 'Gagal memproses keuangan.'
   }
 }

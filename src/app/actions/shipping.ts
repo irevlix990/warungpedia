@@ -13,6 +13,7 @@ import {
 import {
   confirmReceipt,
   escalateDispute,
+  processOrder,
   requestReturn,
   resolveDispute,
   respondReturn,
@@ -52,6 +53,29 @@ export async function shipOrderAction(
   }
 
   revalidatePath(`/seller/orders/${parsed.data.orderId}`)
+  revalidatePath('/seller/orders')
+  return { success: true }
+}
+
+/** SELLER confirms they will process the order. */
+export async function processOrderAction(
+  _state: ShippingActionState | undefined,
+  formData: FormData
+): Promise<ShippingActionState> {
+  await requirePermission('MANAGE_STORE')
+
+  const orderId = formData.get('orderId')?.toString()
+  if (!orderId) {
+    return { message: 'ID pesanan tidak valid.' }
+  }
+
+  try {
+    await processOrder(orderId)
+  } catch (error) {
+    return { message: (error as Error).message }
+  }
+
+  revalidatePath(`/seller/orders/${orderId}`)
   revalidatePath('/seller/orders')
   return { success: true }
 }

@@ -157,7 +157,7 @@ export async function markNotificationRead(notificationId: string): Promise<void
 /** Marks all of the acting user's notifications read. */
 export async function markAllNotificationsRead(): Promise<void> {
   const supabase = await createClient()
-  const { error } = await supabase.rpc('mark_all_notifications_read', {})
+  const { error } = await supabase.rpc('mark_all_notifications_read')
   if (error) {
     throw new Error('Gagal menandai semua notifikasi.')
   }

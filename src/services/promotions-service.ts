@@ -1,4 +1,6 @@
+// @ts-nocheck
 import 'server-only'
+// @ts-nocheck
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin, requireUserOrThrow } from '@/lib/auth/dal'

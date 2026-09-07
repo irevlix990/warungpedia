@@ -69,6 +69,7 @@ export interface SellerEarning {
 export interface Withdrawal {
   id: string
   userId: string
+  sellerName: string | null
   amount: number
   status: WithdrawalStatus
   bankName: string
@@ -76,6 +77,7 @@ export interface Withdrawal {
   bankAccountName: string
   rejectionReason: string | null
   createdAt: string
+  processedAt: string | null
 }
 
 /** Display parts derived from a gross figure + commission (integer IDR). */

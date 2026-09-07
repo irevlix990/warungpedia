@@ -252,6 +252,7 @@ export const en: IdDictionary = {
     statusProcessing: 'Processing',
     statusPaid: 'Paid',
     statusRejected: 'Rejected',
+    selectBank: 'Select bank...',
     rejectReason: 'Rejection reason',
     noWithdrawals: 'No withdrawals yet.',
     noLedger: 'No transaction history yet.',
@@ -264,6 +265,8 @@ export const en: IdDictionary = {
   },
   shipping: {
     title: 'Shipping',
+    processOrder: 'Process Order',
+    processOrderHint: 'You have 1x24h to ship after confirming. Order auto‑cancels if not processed within 2x24h.',
     shipOrder: 'Confirm Shipment',
     carrier: 'Carrier',
     trackingNumber: 'Tracking Number',

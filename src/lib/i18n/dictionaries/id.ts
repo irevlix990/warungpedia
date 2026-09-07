@@ -249,6 +249,7 @@ export const id = {
     statusProcessing: 'Diproses',
     statusPaid: 'Dibayar',
     statusRejected: 'Ditolak',
+    selectBank: 'Pilih bank...',
     rejectReason: 'Alasan penolakan',
     noWithdrawals: 'Belum ada penarikan.',
     noLedger: 'Belum ada riwayat keuangan.',
@@ -261,6 +262,8 @@ export const id = {
   },
   shipping: {
     title: 'Pengiriman',
+    processOrder: 'Konfirmasi Pesanan',
+    processOrderHint: 'Anda memiliki 1x24 jam untuk mengirim setelah konfirmasi. Pesanan otomatis dibatalkan jika tidak dikonfirmasi dalam 2x24 jam.',
     shipOrder: 'Konfirmasi Pengiriman',
     carrier: 'Kurir',
     trackingNumber: 'Nomor Resi',

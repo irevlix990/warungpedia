@@ -66,7 +66,8 @@ export async function getSellerOverview(
     p_to: to,
   })
   if (error) throw new Error(`Gagal memuat ringkasan: ${error.message}`)
-  const row = rowOrFirst<SellerOverviewRow>(data)
+  const rows = (Array.isArray(data) ? data : []) as SellerOverviewRow
+  const row = rows[0] ?? null
   return {
     orders: row?.orders ?? 0,
     units: row?.units ?? 0,
@@ -92,9 +93,9 @@ export async function getSellerSalesSeries(
     p_to: to,
   })
   if (error) throw new Error(`Gagal memuat deret penjualan: ${error.message}`)
-  const rows = rowsOf<SellerSeriesRow>(data)
+  const rows = (Array.isArray(data) ? data : []) as any[]
   return completeDailySeries(
-    rows.map((r) => ({ date: r.day, total: r.revenue, orders: r.orders })),
+    rows.map((r:any) => ({ date: r.day, total: r.revenue, orders: r.orders })),
     new Date(from),
     new Date(to),
     () => ({ total: 0, orders: 0 })
@@ -114,14 +115,15 @@ export async function getSellerProductAnalytics(
     p_to: to,
   })
   if (error) throw new Error(`Gagal memuat analisis produk: ${error.message}`)
-  return rowsOf<SellerProductRow>(data).map((r) => ({
-    productId: r.product_id,
-    productName: r.product_name,
-    slug: r.slug,
-    views: r.views,
-    ordersCount: r.orders_count,
-    unitsSold: r.units_sold,
-    revenueNet: r.revenue_net,
+  const rows = (Array.isArray(data) ? data : []) as any[]
+  return rows.map((p:any) => ({
+    productId: p.product_id,
+    productName: p.product_name,
+    slug: p.slug,
+    views: p.views,
+    ordersCount: p.orders_count,
+    unitsSold: p.units_sold,
+    revenueNet: p.revenue_net,
   }))
 }
 
@@ -138,7 +140,8 @@ export async function getSellerCustomerAnalytics(
     p_to: to,
   })
   if (error) throw new Error(`Gagal memuat analisis pelanggan: ${error.message}`)
-  const r = rowOrFirst<SellerCustomerRow>(data)
+  const rows = (Array.isArray(data) ? data : []) as SellerCustomerRow
+  const r = rows[0] ?? null
   return {
     totalBuyers: r?.total_buyers ?? 0,
     repeatBuyers: r?.repeat_buyers ?? 0,
@@ -200,7 +203,8 @@ export async function getAdminMarketplaceKpis(
     p_to: to,
   })
   if (error) throw new Error(`Gagal memuat KPI pasar: ${error.message}`)
-  const r = rowOrFirst<MarketRow>(data)
+  const rows = (Array.isArray(data) ? data : []) as MarketRow
+  const r = rows[0] ?? null
   return {
     gmv: r?.gmv ?? 0,
     ordersCount: r?.orders_count ?? 0,

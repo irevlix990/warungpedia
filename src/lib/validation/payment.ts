@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { INDONESIAN_BANKS } from '@/config/banks'
 
 export const paymentMethods = ['WALLET', 'BANK_TRANSFER', 'COD'] as const
 
@@ -16,11 +17,9 @@ export const payOrderSchema = z.object({
 /** Validates a seller withdrawal request. */
 export const requestWithdrawalSchema = z.object({
   amount: intAmount,
-  bankName: z
-    .string()
-    .trim()
-    .min(2, { message: 'Nama bank wajib diisi.' })
-    .max(80),
+  bankName: z.enum(INDONESIAN_BANKS, {
+    message: 'Silakan pilih bank dari daftar.',
+  }),
   bankAccountNumber: z
     .string()
     .trim()
