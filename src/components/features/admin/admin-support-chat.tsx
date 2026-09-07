@@ -56,6 +56,25 @@ export function AdminSupportChatDashboard({
   const [isSending, startSendTransition] = useTransition()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // 0. Fetch conversations on mount using the browser client (has admin JWT)
+  useEffect(() => {
+    let ignore = false
+    const supabase = createClient()
+    void (async () => {
+      try {
+        const { data, error } = await supabase.rpc('admin_get_support_conversations')
+        if (ignore) return
+        if (!error && data && data.length > 0) {
+          setConversations(data)
+          setSelectedConvId((prev) => prev ?? data[0].id)
+        }
+      } catch {
+        // ignore network errors
+      }
+    })()
+    return () => { ignore = true }
+  }, [])
+
   // 1. Fetch messages when active conversation changes
   useEffect(() => {
     let ignore = false

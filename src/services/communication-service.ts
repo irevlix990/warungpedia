@@ -262,6 +262,7 @@ export async function getAdminSupportConversations() {
   const supabase = await createClient()
   const { data, error } = await supabase.rpc('admin_get_support_conversations')
   if (error) {
+    console.error('[admin_get_support_conversations]', error.message, error.code)
     return []
   }
   return data ?? []
@@ -274,6 +275,7 @@ export async function getAdminSupportMessages(conversationId: string) {
     p_conversation_id: conversationId,
   })
   if (error) {
+    console.error('[admin_get_support_messages]', error.message, error.code)
     return []
   }
   return data ?? []
@@ -284,9 +286,10 @@ export async function sendAdminSupportReply(conversationId: string, body: string
   const supabase = await createClient()
   const { data: id, error } = await supabase.rpc('admin_send_support_message', {
     p_conversation_id: conversationId,
-    p_body: body,
+    p_body: body.trim(),
   })
   if (error) {
+    console.error('[admin_send_support_message]', error.message, error.code)
     throw new Error('Gagal membalas pesan.')
   }
   return id

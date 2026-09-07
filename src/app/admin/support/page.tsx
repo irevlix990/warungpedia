@@ -4,6 +4,8 @@ import { getCurrentUser } from '@/lib/auth/dal'
 import { getAdminSupportConversations } from '@/services/communication-service'
 import { AdminSupportChatDashboard } from '@/components/features/admin/admin-support-chat'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Live Chat Support | Admin Warungpedia',
   description: 'Kelola dan balas pertanyaan live chat dari pengguna secara realtime.',
