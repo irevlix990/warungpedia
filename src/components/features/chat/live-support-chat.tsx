@@ -40,6 +40,7 @@ export function LiveSupportChat() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
   const [isSending, startSendTransition] = useTransition()
+  const [shouldMarkRead, setShouldMarkRead] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -130,12 +131,19 @@ export function LiveSupportChat() {
   }, [userId])
 
   // 3. Mark read when chat window is open
+  useEffect(() => {
+    if (shouldMarkRead) {
+      setShouldMarkRead(false)
+      void markSupportConversationReadAction()
+    }
+  }, [shouldMarkRead])
+
   const handleOpenChat = () => {
     setIsOpen((prev) => {
       const next = !prev
       if (next && unreadCount > 0) {
         setUnreadCount(0)
-        void markSupportConversationReadAction()
+        setShouldMarkRead(true)
       }
       return next
     })

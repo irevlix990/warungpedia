@@ -42,6 +42,7 @@ export default async function AdminLayout({
         { href: '/admin/withdrawals', label: t.admin.withdrawals },
         { href: '/admin/vouchers', label: t.admin.vouchers },
         { href: '/admin/flash-sales', label: t.admin.flashSales },
+        { href: '/admin/settings/bank', label: t.admin.bankSettings },
       ],
     },
     {

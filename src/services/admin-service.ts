@@ -1,6 +1,7 @@
 import 'server-only'
 import { cache } from 'react'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
+import { createClient } from '@/lib/supabase/server'
 import {
   requirePermission,
   requireSuperAdmin,
@@ -185,6 +186,18 @@ export async function moderateProduct(
 // ---------------------------------------------------------------------------
 // Order management
 // ---------------------------------------------------------------------------
+
+/** Admin: verify a bank-transfer payment → mark order PAID. */
+export async function adminVerifyBankTransfer(orderId: string): Promise<void> {
+  await requirePermission('MANAGE_ORDERS')
+  const supabase = await createClient()
+  const { error } = await supabase.rpc('admin_verify_bank_transfer' as never, {
+    p_order_id: orderId,
+  } as never)
+  if (error) {
+    throw new Error(`Gagal verifikasi pembayaran: ${error.message}`)
+  }
+}
 
 /** Admin: orders for management, optional status filter. */
 export async function getAdminOrders(

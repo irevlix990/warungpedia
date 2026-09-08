@@ -1,4 +1,5 @@
 import type { Product } from './product'
+import type { PaymentMethod } from './payment'
 
 export const ORDER_STATUSES = [
   'PENDING',
@@ -45,10 +46,12 @@ export interface Order {
   id: string
   userId: string
   status: OrderStatus
+  paymentMethod: PaymentMethod
   subtotal: number
   shippingFee: number
   discount: number
   total: number
+  paidAt: string | null
   createdAt: string
   updatedAt: string
   items: OrderItem[]

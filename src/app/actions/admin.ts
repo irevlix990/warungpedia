@@ -2,6 +2,23 @@
 
 import { revalidatePath } from 'next/cache'
 import { requirePermission, requireSuperAdmin } from '@/lib/auth/dal'
+import { adminVerifyBankTransfer } from '@/services/admin-service'
+
+/** Admin: verify a bank-transfer payment for an order. */
+export async function verifyPaymentAction(
+  orderId: string
+): Promise<{ success?: boolean; error?: string }> {
+  await requirePermission('MANAGE_ORDERS')
+  try {
+    await adminVerifyBankTransfer(orderId)
+    revalidatePath('/admin/orders')
+    revalidatePath(`/admin/orders/${orderId}`)
+    return { success: true }
+  } catch (err) {
+    return { error: (err as Error).message }
+  }
+}
+
 import {
   categorySchema,
   moderateProductSchema,

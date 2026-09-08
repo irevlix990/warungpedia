@@ -10,6 +10,7 @@ import {
   removeFromCart,
   updateCartItem,
 } from '@/services/cart-service'
+import { createClient } from '@/lib/supabase/server'
 
 export interface CartActionState {
   errors?: Record<string, string[] | undefined>
@@ -91,6 +92,7 @@ export async function checkoutAction(formData: FormData): Promise<void> {
   await requireUserOrThrow()
 
   const voucherCode = formData.get('voucherCode')?.toString()
+  const paymentMethod = formData.get('paymentMethod')?.toString() || 'BANK_TRANSFER'
 
   let orderId: string
   try {
@@ -99,7 +101,22 @@ export async function checkoutAction(formData: FormData): Promise<void> {
     redirect('/cart?error=checkout')
   }
 
+  // Update payment method on the order (default is BANK_TRANSFER from DB)
+  if (paymentMethod !== 'BANK_TRANSFER') {
+    const supabase = await createClient()
+    await supabase
+      .from('orders')
+      .update({ payment_method: paymentMethod } as never)
+      .eq('id', orderId)
+  }
+
   revalidatePath('/cart')
   revalidatePath('/account/orders')
+
+  // For bank transfer, redirect to payment instruction page
+  if (paymentMethod === 'BANK_TRANSFER') {
+    redirect(`/orders/${orderId}/pay`)
+  }
+
   redirect(`/orders/${orderId}`)
 }

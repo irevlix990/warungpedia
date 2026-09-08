@@ -541,6 +541,7 @@ export const en: IdDictionary = {
     addSetting: 'Add Setting',
     vouchers: 'Vouchers',
     flashSales: 'Flash Sale',
+    bankSettings: 'Bank Settings',
     stats: {
       users: 'Total Users',
       buyers: 'Buyers',

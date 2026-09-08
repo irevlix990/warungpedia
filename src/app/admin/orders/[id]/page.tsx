@@ -5,6 +5,7 @@ import { getDictionary } from '@/lib/i18n'
 import { requirePermission } from '@/lib/auth/dal'
 import { getOrderById } from '@/services/cart-service'
 import { Card, Badge } from '@/components/ui'
+import { VerifyPaymentButton } from '@/components/features/admin/verify-payment-button'
 import { formatIDR } from '@/utils/cn'
 
 export const metadata: Metadata = {
@@ -72,8 +73,27 @@ export default async function AdminOrderDetailPage({
           <p className="mt-2 text-xs text-neutral-500">
             {t.status}: {order.status}
           </p>
+          <p className="mt-1 text-xs text-neutral-500">
+            Metode: {order.paymentMethod}
+          </p>
         </Card>
       </div>
+
+      {order.status === 'PENDING' && order.paymentMethod === 'BANK_TRANSFER' ? (
+        <Card className="p-5">
+          <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+            Verifikasi Pembayaran Transfer Bank
+          </h3>
+          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
+            Pastikan transfer sudah masuk ke rekening Warungpedia sebelum
+            memverifikasi. Setelah diverifikasi, status pesanan berubah menjadi
+            PAID.
+          </p>
+          <div className="mt-4 max-w-xs">
+            <VerifyPaymentButton orderId={order.id} />
+          </div>
+        </Card>
+      ) : null}
 
       <Card className="overflow-hidden">
         <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
