@@ -48,6 +48,7 @@ export const voucherInputSchema = z
       .nullable()
       .optional(),
     isActive: z.boolean().optional(),
+    requiresWallet: z.boolean().optional(),
     startsAt: z
       .string({ message: 'Waktu mulai tidak valid.' })
       .datetime({ offset: true })

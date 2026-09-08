@@ -96,7 +96,7 @@ export async function checkoutAction(formData: FormData): Promise<void> {
 
   let orderId: string
   try {
-    orderId = await placeOrder(voucherCode)
+    orderId = await placeOrder(voucherCode, paymentMethod)
   } catch {
     redirect('/cart?error=checkout')
   }

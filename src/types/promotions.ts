@@ -15,6 +15,7 @@ export interface Voucher {
   totalUsageLimit: number | null
   usesCount: number
   isActive: boolean
+  requiresWallet: boolean
   startsAt: string | null
   expiresAt: string | null
   createdAt: string
@@ -31,6 +32,7 @@ export interface VoucherInput {
   perUserLimit?: number
   totalUsageLimit?: number | null
   isActive?: boolean
+  requiresWallet?: boolean
   startsAt?: string | null
   expiresAt?: string | null
 }

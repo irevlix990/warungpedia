@@ -217,6 +217,16 @@ export function VoucherForm({ t, voucher }: VoucherFormProps) {
         {t.active}
       </label>
 
+      <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-200 sm:col-span-2">
+        <input
+          type="checkbox"
+          name="requiresWallet"
+          defaultChecked={voucher?.requiresWallet ?? false}
+          className="size-4 text-brand-600 focus:ring-brand-500"
+        />
+        {t.requiresWallet}
+      </label>
+
       <div className="sm:col-span-2">
         <Button type="submit" disabled={pending}>
           {voucher ? t.editVoucher : t.addVoucher}

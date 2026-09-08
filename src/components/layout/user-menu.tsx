@@ -48,6 +48,7 @@ async function UserMenuInner() {
       labels={{
         myProfile: t.menu.myProfile,
         myAddresses: t.menu.myAddresses,
+        myWallet: t.menu.myWallet,
         cart: t.menu.cart,
         orders: t.menu.orders,
         notifications: t.menu.notifications,

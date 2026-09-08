@@ -28,8 +28,7 @@ function mapVoucher(row: VoucherRow): Voucher {
     perUserLimit: row.per_user_limit,
     totalUsageLimit: row.total_usage_limit,
     usesCount: row.uses_count,
-    isActive: row.is_active,
-    startsAt: row.starts_at,
+    isActive: row.is_active,    requiresWallet: row.requires_wallet ?? false,    startsAt: row.starts_at,
     expiresAt: row.expires_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -177,6 +176,7 @@ export async function createVoucher(
     p_per_user_limit: input.perUserLimit ?? 1,
     p_total_usage_limit: input.totalUsageLimit ?? null,
     p_is_active: input.isActive ?? true,
+    p_requires_wallet: input.requiresWallet ?? false,
     p_starts_at: input.startsAt ?? null,
     p_expires_at: input.expiresAt ?? null,
   })
@@ -202,6 +202,7 @@ export async function updateVoucher(
     p_per_user_limit: input.perUserLimit ?? 1,
     p_total_usage_limit: input.totalUsageLimit ?? null,
     p_is_active: input.isActive ?? true,
+    p_requires_wallet: input.requiresWallet ?? false,
     p_starts_at: input.startsAt ?? null,
     p_expires_at: input.expiresAt ?? null,
   })

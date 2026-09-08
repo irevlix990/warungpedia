@@ -7,6 +7,7 @@ import {
   User,
   MapPin,
   ShoppingCart,
+  CreditCard,
   Package,
   Bell,
   MessageSquare,
@@ -25,6 +26,7 @@ interface UserMenuDropdownProps {
   labels: {
     myProfile: string
     myAddresses: string
+    myWallet: string
     cart: string
     orders: string
     notifications: string
@@ -119,6 +121,14 @@ export function UserMenuDropdown({
             >
               <ShoppingCart className="size-4 text-neutral-400" />
               {labels.cart}
+            </Link>
+            <Link
+              href="/account/wallet"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+            >
+              <CreditCard className="size-4 text-neutral-400" />
+              {labels.myWallet ?? 'Dompet'}
             </Link>
             <Link
               href="/orders"

@@ -44,8 +44,9 @@ export default async function AdminVouchersPage() {
                     </p>
                     <Badge variant={v.isActive ? 'success' : 'neutral'}>
                       {v.isActive ? t.promotions.active : 'â€”'}
-                    </Badge>
-                  </div>
+                    </Badge>                    {v.requiresWallet && (
+                      <Badge variant="warning">Saldo Only</Badge>
+                    )}                  </div>
                   {v.description && (
                     <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">
                       {v.description}

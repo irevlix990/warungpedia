@@ -57,6 +57,7 @@ export async function createVoucherAction(
       ? Number(formData.get('totalUsageLimit'))
       : null,
     isActive: formData.get('isActive') === 'on',
+    requiresWallet: formData.get('requiresWallet') === 'on',
     startsAt: toUtcIso(formData.get('startsAt')),
     expiresAt: toUtcIso(formData.get('expiresAt')),
   })
@@ -97,6 +98,7 @@ export async function updateVoucherAction(
       ? Number(formData.get('totalUsageLimit'))
       : null,
     isActive: formData.get('isActive') === 'on',
+    requiresWallet: formData.get('requiresWallet') === 'on',
     startsAt: toUtcIso(formData.get('startsAt')),
     expiresAt: toUtcIso(formData.get('expiresAt')),
   })

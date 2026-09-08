@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import {
   requestWithdrawalAction,
+  requestWalletWithdrawalAction,
   type PaymentActionState,
 } from '@/app/actions/payment'
 import { Button } from '@/components/ui/button'
@@ -14,13 +15,15 @@ import type { DictionaryFinance } from '../auth/action-strings'
 interface WithdrawalFormProps {
   balance: number
   t: DictionaryFinance
+  /** When true, uses the buyer wallet action (redirects to /account/wallet). */
+  walletMode?: boolean
 }
 
-export function WithdrawalForm({ balance, t }: WithdrawalFormProps) {
+export function WithdrawalForm({ balance, t, walletMode = false }: WithdrawalFormProps) {
   const [state, formAction, pending] = useActionState<
     PaymentActionState | undefined,
     FormData
-  >(requestWithdrawalAction, undefined)
+  >(walletMode ? requestWalletWithdrawalAction : requestWithdrawalAction, undefined)
 
   const error = (field: string) => {
     const list = state?.errors?.[field]

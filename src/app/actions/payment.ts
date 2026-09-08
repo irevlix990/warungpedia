@@ -76,6 +76,33 @@ export async function requestWithdrawalAction(
   redirect('/seller/finances?requested=1')
 }
 
+/** Any user (buyer or seller) requests a payout from their wallet balance. */
+export async function requestWalletWithdrawalAction(
+  _state: PaymentActionState | undefined,
+  formData: FormData
+): Promise<PaymentActionState> {
+  await requireUserOrThrow()
+
+  const parsed = requestWithdrawalSchema.safeParse({
+    amount: Number(formData.get('amount')),
+    bankName: formData.get('bankName')?.toString(),
+    bankAccountNumber: formData.get('bankAccountNumber')?.toString(),
+    bankAccountName: formData.get('bankAccountName')?.toString(),
+  })
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors }
+  }
+
+  try {
+    await requestWithdrawal(parsed.data)
+  } catch (error) {
+    return { message: (error as Error).message }
+  }
+
+  revalidatePath('/account/wallet')
+  redirect('/account/wallet?requested=1')
+}
+
 /** ADMIN approves a pending withdrawal. */
 export async function approveWithdrawalAction(formData: FormData): Promise<void> {
   await requirePermission('MANAGE_WITHDRAWALS')

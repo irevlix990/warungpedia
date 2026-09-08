@@ -167,11 +167,12 @@ export async function removeFromCart(itemId: string): Promise<void> {
  * optional voucher code is validated and applied server-side. Returns the new
  * order id; callers redirect to an order confirmation.
  */
-export async function placeOrder(voucherCode?: string): Promise<string> {
+export async function placeOrder(voucherCode?: string, paymentMethod?: string): Promise<string> {
   const supabase = await createClient()
-  const { data: orderId, error } = await supabase.rpc('place_order', {
+  const { data: orderId, error } = await supabase.rpc('place_order' as never, {
     p_voucher_code: voucherCode ?? null,
-  })
+    p_payment_method: paymentMethod ?? 'BANK_TRANSFER',
+  } as never)
   if (error) {
     throw new Error(mapCartError(error.code, error.message))
   }
