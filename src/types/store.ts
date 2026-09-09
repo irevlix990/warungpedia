@@ -8,6 +8,16 @@ export const STORE_STATUSES = [
 
 export type StoreStatus = (typeof STORE_STATUSES)[number]
 
+/** Seller badges: OFFICIAL = verified by Warungpedia, MALL = large store, STAR = good seller, null = no badge. */
+export const SELLER_BADGES = ['OFFICIAL', 'MALL', 'STAR'] as const
+export type SellerBadge = (typeof SELLER_BADGES)[number]
+
+export const SELLER_BADGE_LABELS: Record<SellerBadge, string> = {
+  OFFICIAL: 'Official',
+  MALL: 'Mall',
+  STAR: 'Star',
+}
+
 /** Public seller store DTO (server-derived from `stores` rows). */
 export interface Store {
   id: string
@@ -25,6 +35,7 @@ export interface Store {
   district: string | null
   village: string | null
   status: StoreStatus
+  badge: SellerBadge | null
   rejectionReason: string | null
   approvedAt: string | null
   ratingAvg: number

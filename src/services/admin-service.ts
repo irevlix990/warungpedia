@@ -497,6 +497,46 @@ export async function getPublicSiteSettings(): Promise<{
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Badge management                                                          */
+/* -------------------------------------------------------------------------- */
+
+/** Update a buyer's badge (BRONZE, SILVER, GOLD, PLATINUM, VIP, or null). */
+export async function updateBuyerBadge(
+  userId: string,
+  badge: string | null
+): Promise<void> {
+  await requirePermission('MANAGE_USERS')
+  const supabase = await createClient()
+  const { error } = await supabase.rpc('update_buyer_badge', {
+    p_user_id: userId,
+    p_badge: badge || '',
+  })
+  if (error) {
+    throw new Error(
+      mapAdminError(error.code, 'Gagal mengubah badge buyer.')
+    )
+  }
+}
+
+/** Update a seller store's badge (OFFICIAL, MALL, STAR, or null). */
+export async function updateSellerBadge(
+  storeId: string,
+  badge: string | null
+): Promise<void> {
+  await requirePermission('MANAGE_USERS')
+  const supabase = await createClient()
+  const { error } = await supabase.rpc('update_store_badge', {
+    p_store_id: storeId,
+    p_badge: badge || '',
+  })
+  if (error) {
+    throw new Error(
+      mapAdminError(error.code, 'Gagal mengubah badge seller.')
+    )
+  }
+}
+
 /** Maps Postgres error codes to safe, user-facing Indonesian messages. */
 function mapAdminError(code: string | null, fallback: string): string {
   switch (code) {

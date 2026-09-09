@@ -1,6 +1,18 @@
 export const PAYMENT_METHODS = ['WALLET', 'BANK_TRANSFER', 'COD'] as const
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
 
+/** Buyer badges based on spending & trust level. */
+export const BUYER_BADGES = ['VIP', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE'] as const
+export type BuyerBadge = (typeof BUYER_BADGES)[number]
+
+export const BUYER_BADGE_LABELS: Record<BuyerBadge, string> = {
+  VIP: 'VIP',
+  PLATINUM: 'Platinum',
+  GOLD: 'Gold',
+  SILVER: 'Silver',
+  BRONZE: 'Bronze',
+}
+
 export const PAYMENT_STATUSES = ['PENDING', 'SUCCEEDED', 'FAILED'] as const
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number]
 

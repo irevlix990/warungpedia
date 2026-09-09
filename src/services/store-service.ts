@@ -29,6 +29,7 @@ function mapStore(row: StoreRow): Store {
     district: row.district,
     village: row.village,
     status: row.status,
+    badge: row.badge as Store['badge'],
     rejectionReason: row.rejection_reason,
     approvedAt: row.approved_at,
     ratingAvg: Number(row.rating_avg ?? 0),

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { requirePermission, requireSuperAdmin } from '@/lib/auth/dal'
-import { adminVerifyBankTransfer } from '@/services/admin-service'
+import { adminVerifyBankTransfer, updateBuyerBadge, updateSellerBadge } from '@/services/admin-service'
 
 /** Admin: verify a bank-transfer payment for an order. */
 export async function verifyPaymentAction(
@@ -170,6 +170,42 @@ export async function setCategoryActiveAction(formData: FormData): Promise<void>
   revalidatePath('/categories')
   revalidatePath('/')
   purgeCategoryCache()
+}
+
+/** Admin: update a buyer's badge (BRONZE, SILVER, GOLD, PLATINUM, VIP, or null). */
+export async function updateBuyerBadgeAction(
+  _state: AdminActionState | undefined,
+  formData: FormData
+) {
+  const parsed = {
+    userId: formData.get('userId')?.toString() ?? '',
+    badge: formData.get('badge')?.toString() ?? null,
+  }
+  try {
+    await updateBuyerBadge(parsed.userId, parsed.badge)
+  } catch (error) {
+    return { message: (error as Error).message }
+  }
+  revalidatePath('/admin/badges')
+  return { success: true }
+}
+
+/** Admin: update a seller's store badge (OFFICIAL, MALL, STAR, or null). */
+export async function updateSellerBadgeAction(
+  _state: AdminActionState | undefined,
+  formData: FormData
+) {
+  const parsed = {
+    storeId: formData.get('storeId')?.toString() ?? '',
+    badge: formData.get('badge')?.toString() ?? null,
+  }
+  try {
+    await updateSellerBadge(parsed.storeId, parsed.badge)
+  } catch (error) {
+    return { message: (error as Error).message }
+  }
+  revalidatePath('/admin/badges')
+  return { success: true }
 }
 
 /** Admin: save the public-site settings CMS block. */

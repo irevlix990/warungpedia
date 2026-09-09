@@ -88,6 +88,14 @@ export const viewport: Viewport = {
   themeColor: '#8C56D4',
 }
 
+/**
+ * Blocking pre-hydration theme bootstrap. Reads the saved preference (or the
+ * OS preference for 'system') and applies .dark / color-scheme on <html>
+ * before first paint, so SSR markup is consistent with what the client
+ * hydrates (prevents hydration mismatch + FOUC).
+ */
+const themeScript = `(function(){try{var k='wp-theme',t=localStorage.getItem(k)||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';}catch(e){}})();`
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -98,6 +106,9 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${sora.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-screen antialiased">
         <RootProviders>
           <Header />

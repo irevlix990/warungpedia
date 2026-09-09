@@ -537,6 +537,7 @@ export const id = {
     addSetting: 'Tambah Pengaturan',
     vouchers: 'Kupon',
     flashSales: 'Flash Sale',
+    badges: 'Manajemen Badge',
     bankSettings: 'Pengaturan Bank',
     stats: {
       users: 'Total Pengguna',

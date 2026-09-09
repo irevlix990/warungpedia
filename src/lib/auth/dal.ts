@@ -18,12 +18,15 @@ import {
 } from '@/config/roles'
 
 /** Auth identity merged with the user's profile role. */
+import type { BuyerBadge } from '@/types/payment'
+
 export interface AuthUser {
   id: string
   email: string | null
   fullName: string
   avatarUrl: string | null
   role: Role
+  buyerBadge: BuyerBadge | null
   emailVerified: boolean | null
   phone: string | null
   preferredLocale: 'id' | 'en'
@@ -45,7 +48,7 @@ export const getCurrentUser = cache(async (): Promise<AuthUser | null> => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, avatar_url, role, email_verified, phone, preferred_locale, theme_preference, notification_prefs')
+    .select('full_name, avatar_url, role, buyer_badge, email_verified, phone, preferred_locale, theme_preference, notification_prefs')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -59,6 +62,7 @@ export const getCurrentUser = cache(async (): Promise<AuthUser | null> => {
         ? user.user_metadata.avatar_url
         : null),
     role: (profile?.role as Role) ?? 'BUYER',
+    buyerBadge: (profile?.buyer_badge as BuyerBadge) ?? null,
     emailVerified: profile?.email_verified ?? null,
     phone: profile?.phone ?? null,
     preferredLocale: (profile?.preferred_locale as 'id' | 'en') ?? 'id',
